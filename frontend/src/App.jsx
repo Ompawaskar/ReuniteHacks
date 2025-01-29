@@ -15,7 +15,7 @@ import {
 
 import Login from "./components/login";
 import SignUp from "./components/register";
-
+import Capture from "./components/pages/Capture";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Profile from "./components/profile";
@@ -51,7 +51,7 @@ function App() {
               <Route path="/home" element={<Home/>}></Route>
               <Route path="/dashboard" element={<Dashboard/>}></Route>
               <Route path="/complain" element={<Complaint/>}></Route>
-              <Route path="/routemaps" element={<HereMaps/>} ></Route>
+              <Route path="/routemaps" element={<Capture/>} ></Route>
               <Route path="/incidents" element={<IncidentReports/>} ></Route>
               <Route path='/database' element={<Table1 />}></Route>
               <Route path="/community" element={<Community/>}></Route>

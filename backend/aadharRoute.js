@@ -24,6 +24,10 @@ const AadhaarSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   dob: { type: Date, required: true },
   address: { type: String, required: true },
+  phone:{
+    number:{ type: Number, required: true },
+    location:{ type: String, required: true }
+  },
   email: { type: String, required: true },
   photo: { type: String, required: true }, // Base64 encoded
   fingerprint: { type: String, required: true }, // Base64 encoded
