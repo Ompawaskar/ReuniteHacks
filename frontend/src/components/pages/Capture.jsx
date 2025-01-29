@@ -334,7 +334,7 @@ const PhotoUpload = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
           {/* Left side content */}
           <div className="space-y-6">
