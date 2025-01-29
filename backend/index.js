@@ -2,6 +2,7 @@ import { createObjectCsvWriter } from 'csv-writer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express'
+import bodyParser from 'body-parser';
 import qs from 'qs'
 import axios from 'axios';
 import * as cheerio from 'cheerio';
@@ -12,6 +13,7 @@ import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import { uploadOnCloudinary } from './cloudinary.js';
 import dotenv from "dotenv";
+import imageRoutes from './routes/imageRoutes.js'; 
 dotenv.config();
 
 // Get current file path in ES modules
@@ -372,6 +374,14 @@ const createComplaint = async (req, res) => {
 
 //Register Missing Complaint
 app.post('/api/complaint',createComplaint);
+
+app.use(bodyParser.json()); // Parse JSON bodies
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files from the 'uploads' folder
+
+// Use image routes
+app.use('/api', imageRoutes); // Prefix all routes with /api
+
+
 
 mongoose.connect(process.env.MONGODB_URL).
     then((response) => {
