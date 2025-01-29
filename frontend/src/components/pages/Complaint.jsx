@@ -156,7 +156,7 @@ const ComplaintForm = () => {
       setIsSubmitting(false);
     }
   };
-
+  console.log(formData)
   if (loading) {
     return <div>Loading...</div>;
   }
