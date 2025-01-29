@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../shared/Navbar'
-import SplineEmbed from '../../SplineEmbed';
+
 
 
 const Home= () => {
@@ -8,9 +8,7 @@ const Home= () => {
     <div>
       <Navbar/>
       <main>
-     <SplineEmbed/>
     </main>
-
     </div>
   );
 }
