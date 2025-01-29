@@ -39,7 +39,7 @@ const Dashboard = () => {
   return (
     <div>
       <Navbar />
-      <div className='mx-9'>
+      <div className='mx-9 py-10'>
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 w-full mt-4">
           <Card x-chunk="dashboard-01-chunk-0">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

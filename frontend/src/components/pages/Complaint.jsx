@@ -235,7 +235,7 @@ const ComplaintForm = () => {
   return (
     <div className="min-h-screen bg-gray-50">
     <Navbar />
-    <div className="max-w-7xl mx-auto py-8 px-4">
+    <div className="max-w-7xl mx-auto py-10 px-4">
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-2xl text-center font-bold text-gray-900">Missing Person Report</CardTitle>
