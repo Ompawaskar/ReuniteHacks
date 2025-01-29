@@ -7,6 +7,28 @@ import { Button } from '../ui/button';
 import { auth } from '../../../firebase';
 import QrScanner from 'qr-scanner';
 
+import { Camera } from 'lucide-react';
+import { 
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle 
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
+
 const ComplaintForm = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +45,9 @@ const ComplaintForm = () => {
     phone: "",
     address: "",
     aadhar: "",
-    aadharData: ""
+    aadharData: "",
+    missingDate: "",
+    missingTime: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -121,7 +145,9 @@ const ComplaintForm = () => {
         phone: "",
         address: "",
         aadhar: "",
-        aadharData: ""
+        aadharData: "",
+        missingDate: "",
+        missingTime: ""
       });
     } catch (err) {
       console.error('Error submitting complaint:', err);
@@ -134,36 +160,213 @@ const ComplaintForm = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  console.log(formData)
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className='flex justify-center max-w-7xl mx-auto py-12 px-4 '>
-        <form onSubmit={submitHandler} className='grid grid-cols-2 gap-6 bg-white p-10 rounded-xl shadow-md w-full max-w-4xl'>
-          <div className='space-y-4'>
-            <Label>Name</Label>
-            <Input name="name" value={formData.name} onChange={handleInputChange} placeholder="Full Name" />
-            <Label>Age</Label>
-            <Input name="age" value={formData.age} onChange={handleInputChange} placeholder="Age" type="number" />
-            <Label>Gender</Label>
-            <Input name="gender" value={formData.gender} onChange={handleInputChange} placeholder="Gender" />
-            <Label>Phone</Label>
-            <Input name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Phone Number" />
-            <Label>Address</Label>
-            <Input name="address" value={formData.address} onChange={handleInputChange} placeholder="Address" />
-          </div>
-          <div className='space-y-4'>
-            <Label>Height</Label>
-            <Input name="height" value={formData.appearance.height} onChange={handleAppearanceChange} placeholder="Height" />
-            <Label>Clothes Description</Label>
-            <Input name="clothes" value={formData.appearance.clothes} onChange={handleAppearanceChange} placeholder="Clothes Description" />
-            <Label>Upload Photo</Label>
-            <Input type="file" onChange={handleFileChange} accept="image/*" />
-            <Label>Upload Aadhaar QR</Label>
-            <Input type="file" onChange={handleAadharUpload} accept="image/*" />
-          </div>
-          <Button type="submit" className='col-span-2 w-full bg-[#115579]' disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit Complaint'}</Button>
-        </form>
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center font-bold text-gray-900">Missing Person Report</CardTitle>
+            <CardDescription className='text-center'>
+              Please provide as much detail as possible to help locate the missing person
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={submitHandler} className="space-y-8">
+              {/* Personal Information Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Enter full name"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="age">Age</Label>
+                    <Input
+                      id="age"
+                      name="age"
+                      type="number"
+                      value={formData.age}
+                      onChange={handleInputChange}
+                      placeholder="Enter age"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="gender">Gender</Label>
+                    <Select name="gender" onValueChange={(value) => handleInputChange({ target: { name: 'gender', value }})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="Enter phone number"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Physical Description Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Physical Description</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="height">Height</Label>
+                    <Input
+                      id="height"
+                      name="height"
+                      value={formData.appearance.height}
+                      onChange={handleAppearanceChange}
+                      placeholder="Enter height (cm)"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="clothes">Clothing Description</Label>
+                    <Textarea
+                      id="clothes"
+                      name="clothes"
+                      value={formData.appearance.clothes}
+                      onChange={handleAppearanceChange}
+                      placeholder="Describe what they were wearing"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Last Seen Information */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Last Seen Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="missingDate">Date Last Seen</Label>
+                    <Input
+                      id="missingDate"
+                      name="missingDate"
+                      type="date"
+                      value={formData.missingDate}
+                      onChange={handleInputChange}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="missingTime">Time Last Seen</Label>
+                    <Input
+                      id="missingTime"
+                      name="missingTime"
+                      type="time"
+                      value={formData.missingTime}
+                      onChange={handleInputChange}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="address">Last Known Location</Label>
+                    <Textarea
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      placeholder="Enter the last known location or address"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Documents Upload Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Documents & Photos</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="photo">Recent Photo</Label>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        id="photo"
+                        type="file"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => document.getElementById('photo').click()}
+                      >
+                        <Camera className="mr-2 h-4 w-4" />
+                        Upload Photo
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="aadhar">Aadhaar Card QR</Label>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        id="aadhar"
+                        type="file"
+                        onChange={handleAadharUpload}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => document.getElementById('aadhar').click()}
+                      >
+                        Upload Aadhaar QR
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <Button 
+                type="submit" 
+                className="w-full bg-blue-600 hover:bg-blue-700" 
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Report'}
+              </Button>
+            </form>
+
+            {/* Toast Notification */}
+            {toast && (
+              <Alert className={`fixed bottom-4 right-4 w-96 ${
+                toast.type === 'success' ? 'bg-green-50 border-green-200' : 
+                toast.type === 'error' ? 'bg-red-50 border-red-200' : 
+                'bg-blue-50 border-blue-200'
+              }`}>
+                <AlertTitle>{toast.type === 'success' ? 'Success' : 'Error'}</AlertTitle>
+                <AlertDescription>{toast.message}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
