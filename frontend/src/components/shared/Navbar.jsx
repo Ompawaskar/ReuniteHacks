@@ -50,10 +50,9 @@ const Navbar = () => {
       <div className="flex justify-between w-full max-w-[1200px] mx-auto py-4 px-6 items-center">
         {/* Logo Section */}
         <div className="flex items-center space-x-2">
-          <Link to="/home">
-            <p className="text-2xl font-semibold text-[#115579]">
-              <span className="text-[#115579]">Re</span>Unite
-            </p>
+          <Link to="/home" className='flex gap-2'>
+            <img src="./src/assets/logo.png" class="h-8" alt="Flowbite Logo" className='rounded-full w-10' />
+            <span className="text-[#115579] text-2xl font-semibold">ReUnite</span>
           </Link>
         </div>
 
