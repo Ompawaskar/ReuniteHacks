@@ -12,8 +12,13 @@ import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import { uploadOnCloudinary } from './cloudinary.js';
 import dotenv from "dotenv";
-dotenv.config();
+import fileUpload from 'express-fileupload';
+import multer from "multer";
+import bodyParser from "body-parser";
+import { upload } from './multer.middleware.js';
 
+
+dotenv.config();
 // Get current file path in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +26,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // ✅ Parses URL-encoded data
+app.use(fileUpload()); 
 
 // Database models
 const AadharDataSchema = new Schema({
@@ -285,93 +292,12 @@ app.get('/api/missing-person-image/:imgId', async (req, res) => {
     }
 });
 
-const createComplaint = async (req, res) => {
-    console.log("Hello");
-    
-    try {
-        const {
-            name,
-            age,
-            gender,
-            appearance,
-            phone,
-            address,
-            aadharData,
-            missingDate,
-            missingTime
-        } = req.body;
+// Middleware to handle file uploads
+app.post('/api/complaint',upload.single('photo'),(req,res) => {
+    console.log(req.body);
+    console.log(req.files);
+})
 
-        // Handle photo upload
-        if (!req.files?.photo) {
-            return res.status(400).json({
-                success: false,
-                message: "Missing person's photo is required"
-            });
-        }
-
-        // Upload photo to Cloudinary
-        const uploadedPhoto = await uploadOnCloudinary(req.files.photo.data);
-        if (!uploadedPhoto || !uploadedPhoto.secure_url) {
-            return res.status(500).json({
-                success: false,
-                message: "Error uploading photo"
-            });
-        }
-
-        // Create new missing person document
-        const missingPerson = new MissingPerson({
-            name,
-            photo: uploadedPhoto.secure_url,
-            age,
-            gender,
-            appearance,
-            phone,
-            address,
-            aadharData: {
-                ...aadharData,
-                age: parseInt(age),
-                gender
-            },
-            missingDate: new Date(missingDate),
-            missingTime
-        });
-
-        // Save to database
-        const savedComplaint = await missingPerson.save();
-
-        res.status(201).json({
-            success: true,
-            message: "Missing person complaint registered successfully",
-            data: savedComplaint
-        });
-
-    } catch (error) {
-        // Handle specific error cases
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({
-                success: false,
-                message: "Validation Error",
-                errors: Object.values(error.errors).map(err => err.message)
-            });
-        }
-
-        if (error.code === 11000) {
-            return res.status(400).json({
-                success: false,
-                message: "A complaint with this Aadhar number already exists"
-            });
-        }
-
-        console.error("Complaint creation error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Internal server error while creating complaint"
-        });
-    }
-};
-
-//Register Missing Complaint
-app.post('/api/complaint',createComplaint);
 
 mongoose.connect(process.env.MONGODB_URL).
     then((response) => {

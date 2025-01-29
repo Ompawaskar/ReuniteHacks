@@ -172,54 +172,59 @@ const ComplaintForm = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    const data = new FormData();
-    for (const key in formData) {
-      if (key === 'appearance' || key === 'aadharData') {
-        data.append(key, JSON.stringify(formData[key]));
-      } else {
-        data.append(key, formData[key]);
-      }
-    }
-
+  
     try {
-      await axios.post('http://localhost:4001/api/complaint', data, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      console.log("FormData",formData);
+      
+      const submissionData = new FormData();
+      if (formData.photo) {
+        submissionData.append("file", formData.photo); // Use formData.photo instead of undefined selectedFile
+      }
+      submissionData.append("name", formData.name);
+      submissionData.append("age", formData.age);
+      submissionData.append("gender", formData.gender);
+      submissionData.append("phone", formData.phone);
+      submissionData.append("address", formData.address);
+      submissionData.append("missingDate", formData.missingDate);
+      submissionData.append("missingTime", formData.missingTime);
+
+      // Append appearance details
+      submissionData.append("appearance[height]", formData.appearance.height);
+      submissionData.append("appearance[clothes]", formData.appearance.clothes);
+
+      // Append Aadhaar details if available
+      if (formData.aadharData.number) {
+        submissionData.append("aadhar[name]", formData.aadharData.name);
+        submissionData.append("aadhar[number]", formData.aadharData.number);
+        submissionData.append("aadhar[age]", formData.aadharData.age);
+        submissionData.append("aadhar[gender]", formData.aadharData.gender);
+        submissionData.append("aadhar[dob]", formData.aadharData.dob);
+        submissionData.append("aadhar[address]", formData.aadharData.address);
+        submissionData.append("aadhar[phone][number]", formData.aadharData.phone.number);
+        submissionData.append("aadhar[phone][location]", formData.aadharData.phone.location);
+        submissionData.append("aadhar[email]", formData.aadharData.email);
+        submissionData.append("aadhar[photo]", formData.aadharData.photo);
+        submissionData.append("aadhar[fingerprint]", formData.aadharData.fingerprint);
+      }
+
+      const response = await fetch("http://localhost:3001/api/complaints", {
+        method: "POST",
+        body: submissionData, // ✅ No need to stringify
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit complaint");
+      }
+
       showToast("Your complaint has been successfully registered.", "success");
-      setFormData({
-        name: "",
-        photo: "",
-        age: "",
-        gender: "",
-        appearance: { height: "", clothes: "" },
-        phone: "",
-        address: "",
-        aadharData: {
-          name: "",
-          number: null,
-          age: null,
-          gender: "",
-          dob: "",
-          address: "",
-          phone: {
-            number: null,
-            location: ""
-          },
-          email: "",
-          photo: "",
-          fingerprint: ""
-        },
-        missingDate: "",
-        missingTime: ""
-      });
     } catch (err) {
-      console.error('Error submitting complaint:', err);
-      showToast("There was an error submitting your complaint. Please try again.", "error");
+      console.error("Error submitting complaint:", err);
+      showToast(err.message || "There was an error submitting your complaint. Please try again.", "error");
     } finally {
       setIsSubmitting(false);
     }
-  };
+};
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -373,6 +378,7 @@ const ComplaintForm = () => {
         <div className="flex items-center gap-4">
           <Input
             id="photo"
+            name = "photo"
             type="file"
             onChange={handleFileChange}
             accept="image/*"
