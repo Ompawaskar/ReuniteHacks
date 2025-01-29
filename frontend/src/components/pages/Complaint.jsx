@@ -3,37 +3,51 @@ import axios from 'axios';
 import Navbar from '../shared/Navbar';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Button } from '../ui/button';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
-import { auth } from "../../../firebase";
+import { auth } from '../../../firebase';
+import QrScanner from 'qr-scanner';
 
-const categories = [
-  { value: 'theft', label: 'Theft' },
-  { value: 'burglary', label: 'Burglary' },
-  { value: 'assault', label: 'Assault' },
-  { value: 'fraud', label: 'Fraud' },
-  { value: 'vandalism', label: 'Vandalism' },
-  { value: 'drug_offense', label: 'Drug Offense' },
-  { value: 'homicide', label: 'Homicide' },
-  { value: 'domestic_violence', label: 'Domestic Violence' },
-  { value: 'missing_person', label: 'Missing Person' },
-  { value: 'traffic_violation', label: 'Traffic Violation' },
-  { value: 'public_disturbance', label: 'Public Disturbance' },
-  { value: 'sexual_assault', label: 'Sexual Assault' },
-  { value: 'others', label: 'Others' },
-];
+import { Camera } from 'lucide-react';
+import { 
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle 
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
 
 const ComplaintForm = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const [formData, setFormData] = useState({
-    category: '',
-    description: '',
-    anonymous: false,
-    image: null,
-    location: null,
+    name: "",
+    photo: "",
+    age: "",
+    gender: "",
+    appearance: {
+      height: "",
+      clothes: "",
+    },
+    phone: "",
+    address: "",
+    aadhar: "",
+    aadharData: "",
+    missingDate: "",
+    missingTime: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -42,73 +56,66 @@ const ComplaintForm = () => {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const fetchUserData = async (uid) => {
-    try {
-      const response = await axios.get(`http://localhost:3001/api/users/${uid}`);
-      setUserDetails(response.data);
-      console.log(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching user data:", error.message);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        await fetchUserData(user.uid);
-      } else {
-        console.log("No user logged in");
-        setLoading(false);
+        try {
+          const response = await axios.get(`http://localhost:3001/api/users/${user.uid}`);
+          setUserDetails(response.data);
+        } catch (error) {
+          console.error("Error fetching user data:", error.message);
+        }
       }
+      setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setFormData(prev => ({
-            ...prev,
-            location: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            }
-          }));
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          showToast("Unable to get your location. Please ensure location services are enabled.", "error");
-        }
-      );
-    } else {
-      showToast("Your browser doesn't support geolocation.", "error");
-    }
-  }, []);
-
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
+    }));
+  };
+
+  const handleAppearanceChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      appearance: {
+        ...prev.appearance,
+        [name]: value,
+      },
     }));
   };
 
   const handleFileChange = (e) => {
     setFormData(prev => ({
       ...prev,
-      image: e.target.files[0]
+      photo: e.target.files[0]
     }));
   };
 
-  const handleSelect = (value) => {
+  const handleAadharUpload = async (e) => {
+    const file = e.target.files[0];
     setFormData(prev => ({
       ...prev,
-      category: value
+      aadhar: file
     }));
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const result = await QrScanner.scanImage(reader.result);
+        setFormData(prev => ({
+          ...prev,
+          aadharData: result
+        }));
+        showToast("Aadhaar QR scanned successfully!", "success");
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const submitHandler = async (e) => {
@@ -117,34 +124,33 @@ const ComplaintForm = () => {
 
     const data = new FormData();
     for (const key in formData) {
-      if (key === 'location') {
+      if (key === 'appearance') {
         data.append(key, JSON.stringify(formData[key]));
       } else {
         data.append(key, formData[key]);
       }
     }
 
-    if (userDetails && userDetails.email) {
-      data.append('userEmail', userDetails.email);
-    }
-
     try {
-      const response = await axios.post('http://localhost:3001/api/complaints', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      await axios.post('http://localhost:3001/api/complaints', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
-      console.log(response.data);
       showToast("Your complaint has been successfully registered.", "success");
       setFormData({
-        category: '',
-        description: '',
-        anonymous: false,
-        image: null,
-        location: formData.location, // Preserve location
+        name: "",
+        photo: "",
+        age: "",
+        gender: "",
+        appearance: { height: "", clothes: "" },
+        phone: "",
+        address: "",
+        aadhar: "",
+        aadharData: "",
+        missingDate: "",
+        missingTime: ""
       });
     } catch (err) {
-      console.error('Error submitting complaint:', err.response ? err.response.data : err.message);
+      console.error('Error submitting complaint:', err);
       showToast("There was an error submitting your complaint. Please try again.", "error");
     } finally {
       setIsSubmitting(false);
@@ -154,86 +160,216 @@ const ComplaintForm = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className='flex items-center justify-center max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8'>
-        <form onSubmit={submitHandler} className='w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-md'>
-          <h1 className='font-bold text-2xl text-center text-gray-900'>Register a Complaint</h1>
-          
-          <div>
-            <Label htmlFor="category" className='block text-sm font-medium text-gray-700'>Select the Category:</Label>
-            <Select onValueChange={handleSelect} value={formData.category}>
-              <SelectTrigger className="w-full mt-1">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.value} value={category.value}>
-                    {category.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="description" className='block text-sm font-medium text-gray-700'>Description:</Label>
-            <Input 
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm'
-              placeholder="Provide details about the incident"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="image" className='block text-sm font-medium text-gray-700'>Upload an Image:</Label>
-            <Input 
-              id="image"
-              type="file"
-              name="image"
-              onChange={handleFileChange}
-              className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm'
-              accept="image/*"
-            />
-          </div>
-
-          <div className="flex items-center">
-            <RadioGroup className='flex items-center space-x-2'>
-              <div className='flex items-center'>
-                <RadioGroupItem
-                  id="anonymous"
-                  name="anonymous"
-                  checked={formData.anonymous}
-                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, anonymous: checked }))}
-                />
-                <Label htmlFor="anonymous" className='ml-2 block text-sm text-gray-900'>Post this complaint anonymously?</Label>
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center font-bold text-gray-900">Missing Person Report</CardTitle>
+            <CardDescription className='text-center'>
+              Please provide as much detail as possible to help locate the missing person
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={submitHandler} className="space-y-8">
+              {/* Personal Information Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Enter full name"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="age">Age</Label>
+                    <Input
+                      id="age"
+                      name="age"
+                      type="number"
+                      value={formData.age}
+                      onChange={handleInputChange}
+                      placeholder="Enter age"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="gender">Gender</Label>
+                    <Select name="gender" onValueChange={(value) => handleInputChange({ target: { name: 'gender', value }})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="Enter phone number"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
               </div>
-            </RadioGroup>
-          </div>
 
-          <Button 
-            className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' 
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Submitting...' : 'Submit Complaint'}
-          </Button>
-        </form>
+              {/* Physical Description Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Physical Description</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="height">Height</Label>
+                    <Input
+                      id="height"
+                      name="height"
+                      value={formData.appearance.height}
+                      onChange={handleAppearanceChange}
+                      placeholder="Enter height (cm)"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="clothes">Clothing Description</Label>
+                    <Textarea
+                      id="clothes"
+                      name="clothes"
+                      value={formData.appearance.clothes}
+                      onChange={handleAppearanceChange}
+                      placeholder="Describe what they were wearing"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Last Seen Information */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Last Seen Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="missingDate">Date Last Seen</Label>
+                    <Input
+                      id="missingDate"
+                      name="missingDate"
+                      type="date"
+                      value={formData.missingDate}
+                      onChange={handleInputChange}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="missingTime">Time Last Seen</Label>
+                    <Input
+                      id="missingTime"
+                      name="missingTime"
+                      type="time"
+                      value={formData.missingTime}
+                      onChange={handleInputChange}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="address">Last Known Location</Label>
+                    <Textarea
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      placeholder="Enter the last known location or address"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Documents Upload Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Documents & Photos</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="photo">Recent Photo</Label>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        id="photo"
+                        type="file"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => document.getElementById('photo').click()}
+                      >
+                        <Camera className="mr-2 h-4 w-4" />
+                        Upload Photo
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="aadhar">Aadhaar Card QR</Label>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        id="aadhar"
+                        type="file"
+                        onChange={handleAadharUpload}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => document.getElementById('aadhar').click()}
+                      >
+                        Upload Aadhaar QR
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <Button 
+                type="submit" 
+                className="w-full bg-blue-600 hover:bg-blue-700" 
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Report'}
+              </Button>
+            </form>
+
+            {/* Toast Notification */}
+            {toast && (
+              <Alert className={`fixed bottom-4 right-4 w-96 ${
+                toast.type === 'success' ? 'bg-green-50 border-green-200' : 
+                toast.type === 'error' ? 'bg-red-50 border-red-200' : 
+                'bg-blue-50 border-blue-200'
+              }`}>
+                <AlertTitle>{toast.type === 'success' ? 'Success' : 'Error'}</AlertTitle>
+                <AlertDescription>{toast.message}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
       </div>
-      {toast && (
-        <div className={`fixed bottom-4 right-4 p-4 rounded-md ${
-          toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white`}>
-          {toast.message}
-        </div>
-      )}
     </div>
   );
-}
+};
 
 export default ComplaintForm;

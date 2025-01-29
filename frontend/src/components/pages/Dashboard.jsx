@@ -10,7 +10,7 @@ import {
   CardFooter
 } from "@/components/ui/card";
 import { LineChartComp } from '../shared/LineChartComp';
-import { DollarSign, EyeIcon, Receipt, ReceiptIcon, User, Users2 } from 'lucide-react';
+import { Users2 } from 'lucide-react';
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis ,YAxis} from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -44,9 +44,9 @@ const Dashboard = () => {
           <Card x-chunk="dashboard-01-chunk-0">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Total Crimes
+                Total Missing persons
               </CardTitle>
-              <EyeIcon className="h-4 w-4 text-muted-foreground" />
+              <Users2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">9782</div>
@@ -58,9 +58,9 @@ const Dashboard = () => {
           <Card x-chunk="dashboard-01-chunk-0">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Total FIRs
+                Cases reported today
               </CardTitle>
-              <ReceiptIcon className="h-4 w-4 text-muted-foreground" />
+              <Users2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">12000</div>
@@ -72,9 +72,9 @@ const Dashboard = () => {
           <Card x-chunk="dashboard-01-chunk-0">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Total Missing
+                Children missing
               </CardTitle>
-              <User className="h-4 w-4 text-muted-foreground" />
+              <Users2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">2120</div>
@@ -86,7 +86,7 @@ const Dashboard = () => {
           <Card x-chunk="dashboard-01-chunk-0">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Total Unidentified Bodies
+                Women missing
               </CardTitle>
               <Users2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>

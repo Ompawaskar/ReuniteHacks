@@ -7,12 +7,16 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import fs from 'fs/promises'
 import cors from 'cors';
+import aadharRoute from './aadharRoute.js'
+
+
 // Get current file path in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
+
 // Missing person search
 app.get('/api/missingSearch', async (req, res) => {
     const {
@@ -341,29 +345,5 @@ app.get('/api/missingSearch2', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-
-//
-app.get('/api/missing-person-image', async (req, res) => {
-    try {
-      const imgId = 'NuwOY6iuMKPsqDtofruHuP44eDG5A4Bm';
-      const response = await axios({
-        method: 'get',
-        url: `https://citizen.mahapolice.gov.in/Citizen/PersonImageHandler.ashx?ImID=${imgId}&langcd=rGgGlAiFprg=&PersonType=mkcqhSd+vTY=`,
-        headers: {
-          'Cookie': 'ASP.NET_SessionId=yp1w0kgknt5dvkaulywrhsck',
-        },
-        responseType: 'stream'
-      });
-  
-      // Forward the image response headers
-      res.set('Content-Type', response.headers['content-type']);
-      
-      // Pipe the image data to the response
-      response.data.pipe(res);
-    } catch (error) {
-      console.error('Error fetching image:', error);
-      res.status(500).send('Error fetching image');
-    }
-  });
 
 app.listen(4001);
