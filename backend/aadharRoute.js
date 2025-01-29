@@ -9,12 +9,8 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 // MongoDB Atlas connection string
-const mongoURI = 'mongodb+srv://yvrj2:yvrj2@cluster0.q1al2wh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const mongoURI = process.env.MONGODB_URL;
 
-// MongoDB connection
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch((err) => console.log('Error connecting to MongoDB Atlas: ', err));
 
 // Define the Aadhaar Schema
 const AadhaarSchema = new mongoose.Schema({
