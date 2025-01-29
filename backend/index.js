@@ -5,6 +5,7 @@ import express from 'express'
 import qs from 'qs'
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import aadharRoute from './aadharRoute.js'
 
 // Get current file path in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -269,5 +270,7 @@ app.get('/api/missingSearch2', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+app.use('/api', aadharRoute);
 
 app.listen(4001);
