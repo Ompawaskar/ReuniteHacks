@@ -183,7 +183,7 @@ const ComplaintForm = () => {
     }
 
     try {
-      await axios.post('http://localhost:3001/api/complaints', data, {
+      await axios.post('http://localhost:4001/api/complaint', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       showToast("Your complaint has been successfully registered.", "success");
