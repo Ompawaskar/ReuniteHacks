@@ -42,12 +42,12 @@ const Navbar = () => {
 
   const isActive = (path) =>
     location.pathname === path
-      ? 'bg-[#115579] text-white rounded-lg py-2 px-4 transition-all duration-300'
-      : 'hover:bg-[#115579] hover:text-white rounded-lg py-2 px-4 transition-all duration-300'; // Improved hover and active styling
+      ? 'text-[#355F2E] rounded-lg py-2 px-4 transition-all duration-300'
+      : ' py-2 px-4 relative text-gray-800 font-semibold after:block after:h-[2px] after:bg-gray-800 after:w-0 hover:after:w-full after:transition-all after:duration-300'; // Improved hover and active styling
 
   return (
-    <div className="bg-[#E6E6E6] shadow-lg">
-      <div className="flex justify-between w-full max-w-[1200px] mx-auto py-4 px-6 items-center">
+    <div className="bg-[#FBF6E9] mx-auto w-11/12 shadow-lg top-5 sticky z-10 backdrop-blur rounded-full">
+      <div className="flex justify-between mx-auto py-2 px-6 items-center">
         {/* Logo Section */}
         <div className="flex items-center space-x-2">
           <Link to="/home" className='flex gap-2'>
@@ -57,30 +57,30 @@ const Navbar = () => {
         </div>
 
         {/* Navbar Links */}
-        <div className="flex items-center space-x-6">
-          <ul className="hidden md:flex space-x-6">
-            <li className={`${isActive('/dashboard')} cursor-pointer`} onClick={handleDash}>
+        <div className="flex items-center space-x-6 ">
+          <ul className="hidden md:flex space-x-6 text-lg">
+            <li className={`${isActive('/dashboard')} cursor-pointer text-[#115579]`} onClick={handleDash}>
               Dashboard
             </li>
             <li className={`${isActive('/complain')} cursor-pointer`} onClick={handleComplaint}>
-              Post a Complaint
+              Post Complaint
             </li>
             <li className={`${isActive('/incidents')} cursor-pointer`} onClick={handleComm}>
-              Community Forum
+              Community
             </li>
             <li className={`${isActive('/routemaps')} cursor-pointer`} onClick={handleroutes}>
-              Routes
+              Report
             </li>
             <li className={`${isActive('/database')} cursor-pointer`} onClick={handleDatabase}>
-              Database
+              Missing List
             </li>
           </ul>
 
           {/* User Authentication */}
-          {!user ? (
+          {/* {!user ? (
             <div className="hidden md:block">
               <Button
-                className="bg-[#115579] text-white px-6 py-2 rounded-lg hover:bg-[#0e4d6c] transition-all duration-300"
+                className="bg-[#A8CD89] text-black px-6 py-[23px] rounded-lg hover:bg-[#355F2E] hover:text-white transition-all duration-300"
                 onClick={handleLogin}
               >
                 Sign in
@@ -89,13 +89,13 @@ const Navbar = () => {
           ) : (
             <div className="hidden md:block">
               <Button
-                className="bg-[#115579] text-white px-6 py-2 rounded-lg hover:bg-[#0e4d6c] transition-all duration-300"
+                className="bg-[#A8CD89] text-black px-6 py-2 rounded-lg hover:bg-[#355F2E] hover:text-white transition-all duration-300"
                 onClick={handleLogin}
               >
                 LogOut
               </Button>
             </div>
-          )}
+          )} */}
 
           {/* Mobile Menu Toggle */}
           <AlignJustify className="md:hidden text-[#115579] cursor-pointer" onClick={toggle} />

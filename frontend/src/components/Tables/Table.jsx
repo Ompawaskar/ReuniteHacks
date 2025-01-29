@@ -80,7 +80,7 @@ const MissingPersonsSearch = () => {
           <div>
             <label className="block text-sm font-medium mb-1">Date From</label>
             <input
-              type="text"
+              type="date"
               name="DateFrom"
               value={searchParams.DateFrom}
               onChange={handleInputChange}
@@ -91,7 +91,7 @@ const MissingPersonsSearch = () => {
           <div>
             <label className="block text-sm font-medium mb-1">Date To</label>
             <input
-              type="text"
+              type="date"
               name="DateTo"
               value={searchParams.DateTo}
               onChange={handleInputChange}

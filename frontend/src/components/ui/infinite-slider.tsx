@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import { useMotionValue, animate, motion } from 'motion/react';
 import { useState, useEffect } from 'react';
 import useMeasure from 'react-use-measure';
+import React from 'react'
 
 export function InfiniteSlider({
   children,
