@@ -26,6 +26,7 @@ const ComplaintCard = ({ complaint }) => {
     isVerified = false,
     userDetailss,
     anonymous = false,
+    formData = {}, // Add formData to the destructured complaint object
   } = complaint || {};
 
   const [showComments, setShowComments] = useState(false);
@@ -102,6 +103,64 @@ const ComplaintCard = ({ complaint }) => {
         </div>
 
         <p className="text-gray-600 mb-4">{description}</p>
+
+        {/* Display formData fields */}
+        {formData && (
+          <div className="space-y-2 mb-4">
+            {formData.name && (
+              <p className="text-sm text-gray-600">
+                <strong>Name:</strong> {formData.name}
+              </p>
+            )}
+            {formData.photo && (
+              <div className="flex items-center">
+                <strong className="text-sm text-gray-600">Photo:</strong>
+                <img
+                  src={formData.photo}
+                  alt="User"
+                  className="w-10 h-10 rounded-full ml-2"
+                />
+              </div>
+            )}
+            {formData.age && (
+              <p className="text-sm text-gray-600">
+                <strong>Age:</strong> {formData.age}
+              </p>
+            )}
+            {formData.gender && (
+              <p className="text-sm text-gray-600">
+                <strong>Gender:</strong> {formData.gender}
+              </p>
+            )}
+            {formData.appearance && (
+              <div className="text-sm text-gray-600">
+                <strong>Appearance:</strong>
+                <p>Height: {formData.appearance.height}</p>
+                <p>Clothes: {formData.appearance.clothes}</p>
+              </div>
+            )}
+            {formData.phone && (
+              <p className="text-sm text-gray-600">
+                <strong>Phone:</strong> {formData.phone}
+              </p>
+            )}
+            {formData.address && (
+              <p className="text-sm text-gray-600">
+                <strong>Address:</strong> {formData.address}
+              </p>
+            )}
+            {formData.aadhar && (
+              <p className="text-sm text-gray-600">
+                <strong>Aadhar:</strong> {formData.aadhar}
+              </p>
+            )}
+            {formData.aadharData && (
+              <p className="text-sm text-gray-600">
+                <strong>Aadhar Data:</strong> {formData.aadharData}
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="space-y-2 mb-4">
           {location.latitude && location.longitude && (
