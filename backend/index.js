@@ -59,7 +59,7 @@ const AadharDataSchema = new Schema({
     address: { type: String, required: true, trim: true },
     email: { type: String, trim: true, lowercase: true },
     photo: { type: String },
-    fingerprint: { type: FingerprintSchema, required: true }
+    fingerprint: { type: FingerprintSchema, required: false}
 });
 
 const MissingPersonSchema = new Schema({
@@ -449,57 +449,91 @@ app.get('/api/missing-person-image/:imgId', async (req, res) => {
 
 app.post('/api/complaint', upload.single('photo'), async (req, res) => { 
     try {
-        const { name, age, gender, phone, missingdate, missingTime, address, height, clothes,aadharData } = req.body;
+        let { name, age, gender, phone, missingDate, missingTime, address, height, clothes, aadharData } = req.body;
 
-        console.log(req.body);
-        console.log(req.file);
+        console.log('Request Body:', JSON.stringify(req.body, null, 2));
+        console.log('Aadhar Data:', JSON.stringify(aadharData, null, 2));
+        console.log('File:', req.file);
         
         if (!req.file) {
             return res.status(400).json({ error: "No image file provided" });
         }
 
-        // Get the full path of the uploaded file
+        // Standardize gender input (capitalize first letter)
+        gender = gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase();
+
+        // Upload Image to Cloudinary
         const localPath = path.join(req.file.destination, req.file.filename);
-        
-        // Upload to Cloudinary
         const uploadResult = await uploadOnCloudinary(localPath);
 
         if (!uploadResult) {
             return res.status(500).json({ error: "Failed to upload image to Cloudinary" });
         }
 
-        console.log(aadharData);
-        
+        // Parse Aadhar Data if received as a string
+        let parsedAadharData;
+        try {
+            parsedAadharData = typeof aadharData === 'string' ? JSON.parse(aadharData) : aadharData;
+        } catch (error) {
+            console.error('Error parsing aadharData:', error);
+            return res.status(400).json({ error: "Invalid Aadhar data format" });
+        }
 
-        // Here you can save the complaint data along with uploadResult.url to your database
-        const complaintData = {
+        // Construct MissingPerson document
+        const newComplaint = new MissingPerson({
             name,
-            age,
-            gender,
+            age: Number(age), // Ensure it's a number
+            gender, // Standardized gender
             phone,
-            missingdate,
-            missingTime,
             address,
+            missingDate: new Date(missingDate), // Convert to Date object
+            missingTime,
             appearance: {
                 height,
                 clothes,
             },
-            photo: uploadResult.url,
-            aadharData
-        };
+            photo: uploadResult.url, // Cloudinary URL
+            aadharData: parsedAadharData
+        });
 
+        // Save to MongoDB
+        await newComplaint.save();
 
-        // Send response
-        res.status(200).json({
+        console.log('Complaint Saved Successfully:', JSON.stringify(newComplaint, null, 2));
+
+        res.status(201).json({
             message: "Complaint registered successfully",
-            data: complaintData
+            data: newComplaint
         });
 
     } catch (error) {
-        console.error("Error processing complaint:", error);
+        console.error("Error processing complaint:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
+app.get('/api/complaints', async (req, res) => {
+    try {
+        // Fetch all complaints from the database
+        const complaints = await MissingPerson.find();
+
+        // Check if there are no complaints
+        if (complaints.length === 0) {
+            return res.status(404).json({ message: "No complaints found" });
+        }
+
+        // Return the list of complaints
+        res.status(200).json({
+            message: "Complaints retrieved successfully",
+            data: complaints
+        });
+
+    } catch (error) {
+        console.error("Error fetching complaints:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files from the 'uploads' folder
 

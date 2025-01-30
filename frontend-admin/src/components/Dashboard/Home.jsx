@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { EyeIcon, Check, X, Loader2, MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {  Users2 } from 'lucide-react';
+import { Users2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -18,33 +18,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+// Processing Status Enum
 const ProcessingStatus = {
   IDLE: 'idle',
   LOADING: 'loading',
   SUCCESS: 'success',
   ERROR: 'error'
 };
-
-// Sample data with additional fields
-const foundReports = [
-  {
-    id: 1,
-    description: "Found a person matching case MP-2024-08-20-001 in Andheri",
-    timestamp: "2024-01-30 14:30",
-    image: "/api/placeholder/400/300",
-    latitude: "19.1136° N",
-    longitude: "72.8697° E",
-  },
-  {
-    id: 2,
-    description: "Potential match for case MP-2024-08-15-002 spotted in Bandra",
-    timestamp: "2024-01-30 12:15",
-    image: "/api/placeholder/400/300",
-    latitude: "19.0596° N",
-    longitude: "72.8295° E",
-  },
-  // ... other reports
-];
 
 const StatusButton = ({ status, onClick }) => {
   const getStatusDisplay = () => {
@@ -114,7 +94,7 @@ const ReportDetailsModal = ({ report, isOpen, onClose }) => {
         <div className="space-y-4">
           <div className="relative">
             <img
-              src={report?.image}
+              src={report?.imageUrl}
               alt="Report location"
               className="w-full h-64 object-cover rounded-lg"
             />
@@ -150,7 +130,7 @@ const ReportDetailsModal = ({ report, isOpen, onClose }) => {
             </div>
 
             <div className="text-sm text-gray-500">
-              Reported on: {report?.timestamp}
+              Reported on: {new Date(report?.createdAt).toLocaleString()}
             </div>
           </div>
         </div>
@@ -160,7 +140,22 @@ const ReportDetailsModal = ({ report, isOpen, onClose }) => {
 };
 
 const FoundReportsTable = () => {
+  const [foundReports, setFoundReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await fetch("http://localhost:4001/api/images");
+        const data = await response.json();
+        setFoundReports(data);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      }
+    };
+
+    fetchReports();
+  }, []);
 
   const handleView = (report) => {
     setSelectedReport(report);
@@ -182,11 +177,11 @@ const FoundReportsTable = () => {
             </TableHeader>
             <TableBody>
               {foundReports.map((report) => (
-                <TableRow key={report.id}>
+                <TableRow key={report._id}>
                   <TableCell>
                     <div className="flex flex-col">
                       <span className="font-medium">{report.description}</span>
-                      <span className="text-sm text-gray-500">{report.timestamp}</span>
+                      <span className="text-sm text-gray-500">{new Date(report.createdAt).toLocaleString()}</span>
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
@@ -294,7 +289,6 @@ const Home = () => {
       </div>
     </div>
   );
-}
-
+};
 
 export default Home;
