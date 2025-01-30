@@ -66,24 +66,33 @@ const StatusButton = ({ status, onClick }) => {
 
 const ReportDetailsModal = ({ report, isOpen, onClose }) => {
   const [processingStatus, setProcessingStatus] = useState(ProcessingStatus.IDLE);
+  const [matchResult, setMatchResult] = useState(null);
 
   const handleProcessing = async () => {
     setProcessingStatus(ProcessingStatus.LOADING);
-    
+    const formData = new FormData();
+    formData.append("image", report?.imageUrl);
+
     try {
-      // Simulate backend processing
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          // Randomly succeed or fail for demonstration
-          Math.random() > 0.5 ? resolve() : reject();
-        }, 2000);
+      const res = await fetch("http://127.0.0.1:8000/match/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",  // ✅ Send JSON instead of FormData
+        },
+        body: JSON.stringify({
+          imageUrl: report?.imageUrl,  // ✅ Ensure this is a valid URL
+        }),
       });
+
       
+      const data = await res.json();
+      setMatchResult(data);
       setProcessingStatus(ProcessingStatus.SUCCESS);
     } catch (error) {
       setProcessingStatus(ProcessingStatus.ERROR);
     }
   };
+    
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -99,19 +108,16 @@ const ReportDetailsModal = ({ report, isOpen, onClose }) => {
               className="w-full h-64 object-cover rounded-lg"
             />
             <div className="absolute top-4 right-4">
-              <StatusButton 
-                status={processingStatus} 
-                onClick={handleProcessing}
-              />
+              <StatusButton status={processingStatus} onClick={handleProcessing} />
             </div>
           </div>
-          
+
           <div className="space-y-4">
             <div>
               <h3 className="font-semibold mb-2">Description</h3>
               <p className="text-gray-600">{report?.description}</p>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4 text-gray-500" />
@@ -133,6 +139,23 @@ const ReportDetailsModal = ({ report, isOpen, onClose }) => {
               Reported on: {new Date(report?.createdAt).toLocaleString()}
             </div>
           </div>
+          
+          {matchResult && (
+            <div className="p-4 bg-gray-100 rounded-lg shadow">
+              <h3 className="text-lg font-semibold">Matched Person Details</h3>
+              <p><strong>Name:</strong> {matchResult.NAME}</p>
+              <p><strong>Age:</strong> {matchResult.AGE}</p>
+              <p><strong>Incident Place:</strong> {matchResult.INCIDENT_PLACE}</p>
+              <p><strong>Police Station:</strong> {matchResult.POLICE_STATION}</p>
+              <p><strong>District:</strong> {matchResult.DISTRICT}</p>
+              <p><strong>Date of Registration:</strong> {matchResult.DATE_OF_REGISTRATION}</p>
+              <img
+                src={`http://127.0.0.1:8000/${matchResult.IMAGE_PATH}`}
+                alt="Matched Person"
+                className="w-full h-48 object-cover rounded-lg mt-2"
+              />
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
@@ -291,4 +314,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home
