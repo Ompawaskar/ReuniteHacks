@@ -1,0 +1,152 @@
+[
+    {
+      "minutiae_points": [
+        { "x": 45, "y": 89, "type": "ridge_end", "angle": 180 },
+        { "x": 123, "y": 56, "type": "bifurcation", "angle": 90 },
+        { "x": 200, "y": 130, "type": "ridge_end", "angle": 270 },
+        { "x": 250, "y": 180, "type": "bifurcation", "angle": 45 }
+      ],
+      "ridge_flow": [
+        { "x_start": 50, "y_start": 85, "x_end": 120, "y_end": 50 },
+        { "x_start": 200, "y_start": 130, "x_end": 230, "y_end": 150 }
+      ],
+      "fingerprint_pattern": "whorl",
+      "template_version": "1.0",
+      "timestamp": "2025-01-30T14:30:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 60, "y": 100, "type": "ridge_end", "angle": 200 },
+        { "x": 150, "y": 70, "type": "bifurcation", "angle": 100 },
+        { "x": 220, "y": 140, "type": "ridge_end", "angle": 280 },
+        { "x": 270, "y": 190, "type": "bifurcation", "angle": 50 }
+      ],
+      "ridge_flow": [
+        { "x_start": 65, "y_start": 95, "x_end": 130, "y_end": 60 },
+        { "x_start": 210, "y_start": 135, "x_end": 240, "y_end": 160 }
+      ],
+      "fingerprint_pattern": "loop",
+      "template_version": "1.0",
+      "timestamp": "2025-01-31T10:15:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 70, "y": 110, "type": "ridge_end", "angle": 190 },
+        { "x": 160, "y": 80, "type": "bifurcation", "angle": 110 },
+        { "x": 230, "y": 150, "type": "ridge_end", "angle": 290 },
+        { "x": 280, "y": 200, "type": "bifurcation", "angle": 55 }
+      ],
+      "ridge_flow": [
+        { "x_start": 75, "y_start": 105, "x_end": 140, "y_end": 70 },
+        { "x_start": 220, "y_start": 145, "x_end": 250, "y_end": 170 }
+      ],
+      "fingerprint_pattern": "arch",
+      "template_version": "1.0",
+      "timestamp": "2025-02-01T09:45:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 80, "y": 120, "type": "ridge_end", "angle": 185 },
+        { "x": 170, "y": 90, "type": "bifurcation", "angle": 95 },
+        { "x": 240, "y": 160, "type": "ridge_end", "angle": 275 },
+        { "x": 290, "y": 210, "type": "bifurcation", "angle": 40 }
+      ],
+      "ridge_flow": [
+        { "x_start": 85, "y_start": 115, "x_end": 150, "y_end": 80 },
+        { "x_start": 230, "y_start": 155, "x_end": 260, "y_end": 180 }
+      ],
+      "fingerprint_pattern": "whorl",
+      "template_version": "1.0",
+      "timestamp": "2025-02-02T08:30:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 90, "y": 130, "type": "ridge_end", "angle": 195 },
+        { "x": 180, "y": 100, "type": "bifurcation", "angle": 105 },
+        { "x": 250, "y": 170, "type": "ridge_end", "angle": 285 },
+        { "x": 300, "y": 220, "type": "bifurcation", "angle": 60 }
+      ],
+      "ridge_flow": [
+        { "x_start": 95, "y_start": 125, "x_end": 160, "y_end": 90 },
+        { "x_start": 240, "y_start": 165, "x_end": 270, "y_end": 190 }
+      ],
+      "fingerprint_pattern": "loop",
+      "template_version": "1.0",
+      "timestamp": "2025-02-03T07:15:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 100, "y": 140, "type": "ridge_end", "angle": 205 },
+        { "x": 190, "y": 110, "type": "bifurcation", "angle": 115 },
+        { "x": 260, "y": 180, "type": "ridge_end", "angle": 295 },
+        { "x": 310, "y": 230, "type": "bifurcation", "angle": 65 }
+      ],
+      "ridge_flow": [
+        { "x_start": 105, "y_start": 135, "x_end": 170, "y_end": 100 },
+        { "x_start": 250, "y_start": 175, "x_end": 280, "y_end": 200 }
+      ],
+      "fingerprint_pattern": "arch",
+      "template_version": "1.0",
+      "timestamp": "2025-02-04T06:00:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 110, "y": 150, "type": "ridge_end", "angle": 210 },
+        { "x": 200, "y": 120, "type": "bifurcation", "angle": 120 },
+        { "x": 270, "y": 190, "type": "ridge_end", "angle": 300 },
+        { "x": 320, "y": 240, "type": "bifurcation", "angle": 70 }
+      ],
+      "ridge_flow": [
+        { "x_start": 115, "y_start": 145, "x_end": 180, "y_end": 110 },
+        { "x_start": 260, "y_start": 185, "x_end": 290, "y_end": 210 }
+      ],
+      "fingerprint_pattern": "whorl",
+      "template_version": "1.0",
+      "timestamp": "2025-02-05T05:45:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 120, "y": 160, "type": "ridge_end", "angle": 215 },
+        { "x": 210, "y": 130, "type": "bifurcation", "angle": 125 },
+        { "x": 280, "y": 200, "type": "ridge_end", "angle": 305 },
+        { "x": 330, "y": 250, "type": "bifurcation", "angle": 75 }
+      ],
+      "ridge_flow": [
+        { "x_start": 125, "y_start": 155, "x_end": 190, "y_end": 120 },
+        { "x_start": 270, "y_start": 195, "x_end": 300, "y_end": 220 }
+      ],
+      "fingerprint_pattern": "loop",
+      "template_version": "1.0",
+      "timestamp": "2025-02-06T04:30:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 130, "y": 170, "type": "ridge_end", "angle": 220 },
+        { "x": 220, "y": 140, "type": "bifurcation", "angle": 130 },
+        { "x": 290, "y": 210, "type": "ridge_end", "angle": 310 },
+        { "x": 340, "y": 260, "type": "bifurcation", "angle": 80 }
+      ],
+      "ridge_flow": [
+        { "x_start": 135, "y_start": 165, "x_end": 200, "y_end": 130 },
+        { "x_start": 280, "y_start": 205, "x_end": 310, "y_end": 230 }
+      ],
+      "fingerprint_pattern": "arch",
+      "template_version": "1.0",
+      "timestamp": "2025-02-07T03:15:00Z"
+    },
+    {
+      "minutiae_points": [
+        { "x": 140, "y": 180, "type": "ridge_end", "angle": 225 },
+        { "x": 230, "y": 150, "type": "bifurcation", "angle": 135 },
+        { "x": 300, "y": 220, "type": "ridge_end", "angle": 315 },
+        { "x": 350, "y": 270, "type": "bifurcation", "angle": 85 }
+      ],
+      "ridge_flow": [
+        { "x_start": 145, "y_start": 175, "x_end": 210, "y_end": 140 },
+        { "x_start": 290, "y_start": 215, "x_end": 320, "y_end": 240 }
+      ],
+      "fingerprint_pattern": "whorl",
+      "template_version": "1.0",
+      "timestamp": "2025-02-08T02:00:00Z"
+    }
+  ]

@@ -49,7 +49,7 @@ const Dashboard = () => {
               <Users2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">9782</div>
+              <div className="text-2xl font-bold">978</div>
               <p className="text-xs text-muted-foreground text-red-400">
                 20.1% from last month
               </p>
@@ -63,7 +63,7 @@ const Dashboard = () => {
               <Users2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12000</div>
+              <div className="text-2xl font-bold">42</div>
               <p className="text-xs text-muted-foreground text-red-400">
                 +18% from last month
               </p>
@@ -77,7 +77,7 @@ const Dashboard = () => {
               <Users2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2120</div>
+              <div className="text-2xl font-bold">212</div>
               <p className="text-xs text-muted-foreground text-green-400">
                 -20.1% from last month
               </p>
@@ -91,7 +91,7 @@ const Dashboard = () => {
               <Users2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1290</div>
+              <div className="text-2xl font-bold">290</div>
               <p className="text-xs text-muted-foreground text-red-400">
                 +20.1% from last month
               </p>
@@ -101,10 +101,7 @@ const Dashboard = () => {
 
         {/* Area Chart Component */}
         <div className="mt-8 flex justify-between mb-10">
-        <div className='w-[48%]'>
-           <LineChartComp/>
-        </div>
-        <div className='w-[48%] '>
+        <div className='w-[100%] h-[500px]'>
         <iframe
         src="/maharashtra_heatmap.html"
         title="Maharashtra Heatmap"

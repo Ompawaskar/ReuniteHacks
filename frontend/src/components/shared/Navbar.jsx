@@ -65,9 +65,6 @@ const Navbar = () => {
             <li className={`${isActive('/complain')} cursor-pointer`} onClick={handleComplaint}>
               Post Complaint
             </li>
-            <li className={`${isActive('/incidents')} cursor-pointer`} onClick={handleComm}>
-              Community
-            </li>
             <li className={`${isActive('/routemaps')} cursor-pointer`} onClick={handleroutes}>
               Report
             </li>
