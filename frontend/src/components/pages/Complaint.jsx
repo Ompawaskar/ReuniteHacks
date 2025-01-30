@@ -8,12 +8,12 @@ import { auth } from '../../../firebase';
 import QrScanner from 'qr-scanner';
 
 import { Camera, X as XIcon } from 'lucide-react';
-import { 
+import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle 
+  CardTitle
 } from "@/components/ui/card";
 import {
   Select,
@@ -68,11 +68,11 @@ const ComplaintForm = () => {
     const file = e.target.files?.[0] || null;
     setFormData(prev => ({ ...prev, photo: file }));
   };
-  
+
 
   const handleAadharUpload = async (e) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       const reader = new FileReader();
       reader.onload = async () => {
@@ -80,7 +80,7 @@ const ComplaintForm = () => {
           const result = await QrScanner.scanImage(reader.result);
           // Assuming the QR scan result contains the Aadhaar data in the required format
           const aadharData = JSON.parse(result);
-          
+
           // Update both aadharData and form fields
           setFormData(prev => ({
             ...prev,
@@ -105,9 +105,9 @@ const ComplaintForm = () => {
             age: aadharData.age?.toString() || prev.age,
             gender: aadharData.gender?.toLowerCase() || prev.gender,
             phone: aadharData.phone?.number?.toString() || prev.phone,
-            
+
           }));
-          
+
         } catch (error) {
           console.error("Error parsing Aadhaar data:", error);
         }
@@ -136,7 +136,7 @@ const ComplaintForm = () => {
     });
 
     console.log(formData);
-    
+
     try {
       const response = await fetch('http://localhost:4001/api/complaint', {
         method: 'POST',
@@ -150,115 +150,114 @@ const ComplaintForm = () => {
       setToast({ type: 'success', message: 'Report submitted successfully!' });
       setFormData(initialFormState);
     } catch (error) {
-      setToast({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'An unexpected error occurred' 
+      setToast({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'An unexpected error occurred'
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  
-   
+
+
 
   return (
     <div className="min-h-screen bg-gray-50">
-    <Navbar />
-    <div className="max-w-7xl mx-auto py-10 px-4">
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center font-bold text-gray-900">Missing Person Report</CardTitle>
-          <CardDescription className='text-center'>
-            Please provide as much detail as possible to help locate the missing person
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      <Navbar />
+      <div className="max-w-7xl mx-auto py-10 px-4">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center font-bold text-gray-900">Missing Person Report</CardTitle>
+            <CardDescription className='text-center'>
+              Please provide as much detail as possible to help locate the missing person
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
           <form onSubmit={submitHandler} className="space-y-8">
-            {/* Personal Information Section */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="Enter full name"
-                    className="w-full"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="age">Age</Label>
-                  <Input
-                    id="age"
-                    name="age"
-                    type="number"
-                    value={formData.age}
-                    onChange={handleInputChange}
-                    placeholder="Enter age"
-                    className="w-full"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="gender">Gender</Label>
-                  <Select name="gender" onValueChange={(value) => handleInputChange({ target: { name: 'gender', value }})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="Enter phone number"
-                    className="w-full"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Physical Description Section */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900">Physical Description</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="height">Height</Label>
-                  <Input
-                    id="height"
-                    name="height"
-                    value={formData.appearance.height}
-                    onChange={handleAppearanceChange}
-                    placeholder="Enter height (cm)"
-                    className="w-full"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="clothes">Clothing Description</Label>
-                  <Textarea
-                    id="clothes"
-                    name="clothes"
-                    value={formData.appearance.clothes}
-                    onChange={handleAppearanceChange}
-                    placeholder="Describe what they were wearing"
-                    className="w-full"
-                  />
+              {/* Personal Information Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Enter full name"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="age">Age</Label>
+                    <Input
+                      id="age"
+                      name="age"
+                      type="number"
+                      value={formData.age}
+                      onChange={handleInputChange}
+                      placeholder="Enter age"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="gender">Gender</Label>
+                    <Select name="gender" onValueChange={(value) => handleInputChange({ target: { name: 'gender', value } })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="Enter phone number"
+                      className="w-full"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
-              {/* Documents Upload Section */}
+              {/* Physical Description Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Physical Description</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="height">Height</Label>
+                    <Input
+                      id="height"
+                      name="height"
+                      value={formData.appearance.height}
+                      onChange={handleAppearanceChange}
+                      placeholder="Enter height (cm)"
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="clothes">Clothing Description</Label>
+                    <Textarea
+                      id="clothes"
+                      name="clothes"
+                      value={formData.appearance.clothes}
+                      onChange={handleAppearanceChange}
+                      placeholder="Describe what they were wearing"
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-900">Documents & Photos</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -307,111 +306,13 @@ const ComplaintForm = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            
 
-            {/* Documents Upload Section */}
-            <div className="space-y-6">
-  <h3 className="text-lg font-semibold text-gray-900">Documents & Photos</h3>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div className="space-y-2">
-      <Label htmlFor="photo">Recent Photo</Label>
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <Input
-            id="photo"
-            name = "photo"
-            type="file"
-            onChange={handleFileChange}
-            accept="image/*"
-            className="hidden"
-          />
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={() => document.getElementById('photo').click()}
-          >
-            <Camera className="mr-2 h-4 w-4" />
-            Upload Photo
-          </Button>
-        </div>
-        {formData.photoPreview && (
-          <div className="relative">
-            <img
-              src={formData.photoPreview}
-              alt="Photo preview"
-              className="w-48 h-48 object-cover rounded-lg border border-gray-200"
-            />
-            <Button
-              type="button"
-              variant="destructive"
-              size="sm"
-              className="absolute -top-2 -right-2 rounded-full h-6 w-6 p-0"
-              onClick={() => {
-                setFormData(prev => ({
-                  ...prev,
-                  photo: "",
-                  photoPreview: ""
-                }));
-              }}
-            >
-          
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
-    <div className="space-y-2">
-      <Label htmlFor="aadhar">Aadhaar Card QR</Label>
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <Input
-            id="aadhar"
-            type="file"
-            onChange={handleAadharUpload}
-            accept="image/*"
-            className="hidden"
-          />
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={() => document.getElementById('aadhar').click()}
-          >
-            Upload Aadhaar QR
-          </Button>
-        </div>
-        {formData.qrPreview && (
-          <div className="relative">
-            <img
-              src={formData.qrPreview}
-              alt="QR preview"
-              className="w-48 h-48 object-cover rounded-lg border border-gray-200"
-            />
-            <Button
-              type="button"
-              variant="destructive"
-              size="sm"
-              className="absolute -top-2 -right-2 rounded-full h-6 w-6 p-0"
-              onClick={() => {
-                setFormData(prev => ({
-                  ...prev,
-                  qrPreview: ""
-                }));
-              }}
-            >
-      
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
-  </div>
-</div>
+            
             {/* Submit Button */}
-            <Button 
-              type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700" 
+            <Button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Submitting...' : 'Submit Report'}
@@ -420,11 +321,10 @@ const ComplaintForm = () => {
 
           {/* Toast Notification */}
           {toast && (
-            <Alert className={`fixed bottom-4 right-4 w-96 ${
-              toast.type === 'success' ? 'bg-green-50 border-green-200' : 
-              toast.type === 'error' ? 'bg-red-50 border-red-200' : 
-              'bg-blue-50 border-blue-200'
-            }`}>
+            <Alert className={`fixed bottom-4 right-4 w-96 ${toast.type === 'success' ? 'bg-green-50 border-green-200' :
+                toast.type === 'error' ? 'bg-red-50 border-red-200' :
+                  'bg-blue-50 border-blue-200'
+              }`}>
               <AlertTitle>{toast.type === 'success' ? 'Success' : 'Error'}</AlertTitle>
               <AlertDescription>{toast.message}</AlertDescription>
             </Alert>
@@ -432,7 +332,7 @@ const ComplaintForm = () => {
         </CardContent>
       </Card>
     </div>
-  </div>
+        </div>
   );
 };
 

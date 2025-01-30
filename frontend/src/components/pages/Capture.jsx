@@ -194,7 +194,7 @@ const PhotoUpload = () => {
         formData.append("longitude", location.longitude);
       }
 
-      const response = await fetch("http://localhost:3000/api/upload-image", {
+      const response = await fetch("http://localhost:4001/api/upload-image", {
         method: "POST",
         body: formData,
       });
