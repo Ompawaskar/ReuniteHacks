@@ -7,18 +7,16 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import fs from 'fs/promises'
 import cors from 'cors';
-import aadharRoute from './aadharRoute.js'
 import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import { uploadOnCloudinary } from './cloudinary.js';
 import dotenv from "dotenv";
 import { upload } from './multer.middlware.js';
+import imageRoutes from './routes/imageRoutes.js'
 dotenv.config();
-import fileUpload from 'express-fileupload';
 import multer from "multer";
 import bodyParser from "body-parser";
 
-dotenv.config();
 // Get current file path in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,7 +25,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // ✅ Parses URL-encoded data
-app.use(fileUpload()); 
+// app.use(fileUpload()); 
 
 // Database models
 const MinutiaePointSchema = new Schema({
@@ -503,7 +501,10 @@ app.post('/api/complaint', upload.single('photo'), async (req, res) => {
     }
 });
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files from the 'uploads' folder
 
+// Use image routes
+app.use('/api', imageRoutes); // Prefix all routes with /api
 
 mongoose.connect(process.env.MONGODB_URL).
     then((response) => {
