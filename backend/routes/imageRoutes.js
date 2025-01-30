@@ -15,8 +15,10 @@ router.post('/upload-image', upload.single('image'), uploadToCloudinary, async (
         const newImage = new Identify({
             imageUrl: req.imageUrl, // Store the Cloudinary URL
             description: req.body.description,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude
         });
-
+        console.log(newImage)
         console.log('Uploaded Image URL:', newImage.imageUrl);
         console.log('Description:', newImage.description);
 

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Download, Search, User, MapPin, Phone, CreditCard, Check, X, Loader2 } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -52,130 +53,30 @@ const StatusButton = ({ status, onClick }) => {
   );
 };
 
-const missingPersons = [
-  {
-    "id": "MP-2024-08-20-001",
-    "name": "John Doe",
-    "photo": "https://3.imimg.com/data3/FO/QR/MY-14683381/missing-person-tracing-500x500.png",
-    "age": 30,
-    "gender": "Male",
-    "appearance": {
-      "height": "6 feet",
-      "clothes": "Black mask, dark clothing"
-    },
-    "phone": "+91-XXXXXXXXXX",
-    "address": "Some address",
-    "aadhar": "1234 5678 9101",
-    "aadharData": {
-      'email_mobile_status': '3',
-      'referenceid': '151120210414002351360360',
-      'name': 'John Doe',
-      'dob': '12-08-1994',
-      'gender': 'M',
-      'careof': '',
-      'district': 'Mumbai',
-      'landmark': 'Near Gateway of India',
-      'house': 'B/202, Louis Palace',
-      'location': '',
-      'pincode': '400065',
-      'postoffice': '',
-      'state': 'Maharashtra',
-      'street': 'Colaba Causeway',
-      'subdistrict': '',
-      'vtc': 'Colaba',
-      'aadhaar_last_4_digit': '1234',
-      'aadhaar_last_digit': '1',
-      'email': true,
-      'mobile': true,
-      'fingerprint': "link-to-fingerprint-image",
-      'photo': "link-to-photo-image"
-    }
-  },
-  {
-    "id": "MP-2024-08-15-002",
-    "name": "Jane Smith",
-    "photo": "https://3.imimg.com/data3/FO/QR/MY-14683381/missing-person-tracing-500x500.png",
-    "age": 25,
-    "gender": "Female",
-    "appearance": {
-      "height": "5'8\"",
-      "clothes": "Red cap, blue jeans"
-    },
-    "phone": "+91-XXXXXXXXXX",
-    "address": "Another address",
-    "aadhar": "2234 5678 9101",
-    "aadharData": {
-      'email_mobile_status': '2',
-      'referenceid': '161120210414003251360',
-      'name': 'Jane Smith',
-      'dob': '25-02-1999',
-      'gender': 'F',
-      'careof': '',
-      'district': 'Mumbai',
-      'landmark': 'Near Taj Mahal Hotel',
-      'house': 'B/405, Green Palace',
-      'location': '',
-      'pincode': '400065',
-      'postoffice': '',
-      'state': 'Maharashtra',
-      'street': 'Nariman Point',
-      'subdistrict': '',
-      'vtc': 'Nariman Point',
-      'aadhaar_last_4_digit': '5678',
-      'aadhaar_last_digit': '9',
-      'email': true,
-      'mobile': true,
-      'fingerprint': "link-to-fingerprint-image",
-      'photo': "link-to-photo-image"
-    }
-  },
-  {
-    "id": "MP-2024-08-20-003",
-    "name": "Alice Johnson",
-    "photo": "https://3.imimg.com/data3/FO/QR/MY-14683381/missing-person-tracing-500x500.png",
-    "age": 16,
-    "gender": "Female",
-    "appearance": {
-      "height": "5'4\"",
-      "clothes": "Pink dress, white shoes"
-    },
-    "phone": "+91-XXXXXXXXXX",
-    "address": "Another address",
-    "aadhar": "3234 5678 9101",
-    "aadharData": {
-      'email_mobile_status': '2',
-      'referenceid': '161120210414003251360',
-      'name': 'Alice Johnson',
-      'dob': '25-02-2008',
-      'gender': 'F',
-      'careof': '',
-      'district': 'Mumbai',
-      'landmark': 'Near Taj Mahal Hotel',
-      'house': 'B/405, Green Palace',
-      'location': '',
-      'pincode': '400065',
-      'postoffice': '',
-      'state': 'Maharashtra',
-      'street': 'Nariman Point',
-      'subdistrict': '',
-      'vtc': 'Nariman Point',
-      'aadhaar_last_4_digit': '5678',
-      'aadhaar_last_digit': '9',
-      'email': true,
-      'mobile': true,
-      'fingerprint': "link-to-fingerprint-image",
-      'photo': "link-to-photo-image"
-    }
-  }
-];
-
 const MissingPersons = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
+  const [missingPersons, setMissingPersons] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchComplaints = async () => {
+      try {
+        const response = await axios.get("http://localhost:4001/api/complaints");
+        setMissingPersons(response.data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching complaints:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchComplaints();
+  }, []);
 
   const filteredPersons = missingPersons.filter(person => {
     const matchesSearch = person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      person.id.toLowerCase().includes(searchTerm.toLowerCase());
+      person._id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter =
       filter === "all" ||
       (filter === "male" && person.gender.toLowerCase() === "male") ||
@@ -183,6 +84,14 @@ const MissingPersons = () => {
       (filter === "minors" && person.age < 18); // Filter for minors
     return matchesSearch && matchesFilter;
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-gray-500" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -236,7 +145,7 @@ const MissingPersons = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPersons.map((person) => (
-            <AnimatedGroup key={person.id} preset="scale">
+            <AnimatedGroup key={person._id} preset="scale">
               <MissingPersonCard person={person} />
             </AnimatedGroup>
           ))}
@@ -259,7 +168,7 @@ const MissingPersonCard = ({ person }) => {
     phone: person.phone,
     address: person.address,
     aadhar: person.aadhar,
-    aadharData: person.aadharData
+    aadharData: person.aadharData.number
   });
 
   const [processingStatus, setProcessingStatus] = useState(ProcessingStatus.IDLE);
@@ -296,7 +205,7 @@ const MissingPersonCard = ({ person }) => {
             className="w-full h-full object-cover"
           />
           <Badge className="absolute top-4 right-4 bg-blue-500">
-            {person.id}
+            {person._id}
           </Badge>
         </div>
       </CardHeader>
@@ -339,43 +248,15 @@ const MissingPersonCard = ({ person }) => {
               <p className="text-sm text-gray-600">{person.address}</p>
             </div>
           </div>
+
+          <div className="flex items-start gap-2">
+            <CreditCard size={16} className="mt-1 text-gray-400" />
+            <div>
+              <p className="text-sm font-medium text-gray-700">Aadhar Number</p>
+              <p className="text-sm text-gray-600">{person.aadharData.number}</p>
+            </div>
+          </div>
         </div>
-
-        <Accordion type="single" collapsible className="mb-6">
-          <AccordionItem value="aadharData" className="border rounded-lg">
-            <AccordionTrigger className="px-4 py-2 hover:bg-gray-50">
-              <div className="flex items-center gap-2">
-                <CreditCard size={16} />
-                <span>View Aadhar Details</span>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="p-4 space-y-2 text-sm">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="font-medium">Reference ID</p>
-                  <p className="text-gray-600">{formData.aadharData.referenceid}</p>
-                </div>
-                <div>
-                  <p className="font-medium">Date of Birth</p>
-                  <p className="text-gray-600">{formData.aadharData.dob}</p>
-                </div>
-                <div>
-                  <p className="font-medium">District</p>
-                  <p className="text-gray-600">{formData.aadharData.district}</p>
-                </div>
-                <div>
-                  <p className="font-medium">State</p>
-                  <p className="text-gray-600">{formData.aadharData.state}</p>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        <Button className="w-full flex items-center justify-center gap-2">
-          <Download size={16} />
-          Download Full Report
-        </Button>
       </CardContent>
     </Card>
   );

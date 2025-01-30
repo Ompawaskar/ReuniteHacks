@@ -251,7 +251,7 @@ const PhotoUpload = () => {
   );
 
   const LeftContent = () => {
-    if (!isSubmitted && nearbyLocations) {
+    if (isSubmitted && nearbyLocations) {
       return (
         <div className="space-y-6">
           <div>
