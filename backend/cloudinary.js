@@ -39,5 +39,5 @@ export const uploadOnCloudinary = async (localPath) => {
         return null;
     }
 };
-};
+
 
