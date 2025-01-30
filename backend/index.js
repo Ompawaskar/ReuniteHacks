@@ -467,10 +467,7 @@ app.post('/api/complaint', upload.single('photo'), async (req, res) => {
         if (!uploadResult) {
             return res.status(500).json({ error: "Failed to upload image to Cloudinary" });
         }
-
         console.log(aadharData);
-        
-
         // Here you can save the complaint data along with uploadResult.url to your database
         const complaintData = {
             name,
