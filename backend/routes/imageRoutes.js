@@ -41,4 +41,30 @@ router.get('/images', async (req, res) => {
     }
 });
 
+// PATCH route to update the ngo field to true
+// POST route to update the NGO status for a specific image
+router.post('/set-ngo/:id', async (req, res) => {
+    try {
+        // Find the image by its ID
+        const image = await Identify.findById(req.params.id);
+        
+        if (!image) {
+            return res.status(404).json({ message: 'Image not found' });
+        }
+
+        // Toggle the ngo field
+        image.ngo = !image.ngo;
+
+        // Save the updated image document
+        const updatedImage = await image.save();
+
+        res.status(200).json(updatedImage); // Send back the updated image data
+    } catch (error) {
+        console.error('Update error:', error);
+        res.status(500).json({ message: 'Error updating ngo field', error });
+    }
+});
+
+
+
 export default router; // Export the router

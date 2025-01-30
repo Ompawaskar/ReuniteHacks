@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, Check, X, Loader2, MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
+import axios from 'axios';
 // Processing Status Enum
 const ProcessingStatus = {
   IDLE: 'idle',
@@ -142,6 +135,7 @@ const ReportDetailsModal = ({ report, isOpen, onClose }) => {
 const FoundReportsTable = () => {
   const [foundReports, setFoundReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [selectedReports, setSelectedReports] = useState([]);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -161,6 +155,23 @@ const FoundReportsTable = () => {
     setSelectedReport(report);
   };
 
+  const handleCheckboxChange = async (reportId) => {
+    try {
+      const response = await axios.post(`http://localhost:4001/api/set-ngo/${reportId}`);
+      
+      if (response.status === 200) {
+        // Update the selected reports
+        setFoundReports((prevReports) =>
+          prevReports.map((report) =>
+            report._id === reportId ? { ...report, ngo: true } : report
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating NGO status:", error);
+    }
+  };
+
   return (
     <Card className="w-[48%]">
       <CardHeader>
@@ -173,6 +184,7 @@ const FoundReportsTable = () => {
               <TableRow>
                 <TableHead className="font-semibold">Found Reports</TableHead>
                 <TableHead className="w-24 text-right">Actions</TableHead>
+                <TableHead className="w-24 text-center">Mark NGO</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -193,6 +205,14 @@ const FoundReportsTable = () => {
                     >
                       <EyeIcon className="h-4 w-4" />
                     </Button>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <input
+                      type="checkbox"
+                      checked={report.ngo}
+                      onChange={() => handleCheckboxChange(report._id)}
+                      className="h-4 w-4"
+                    />
                   </TableCell>
                 </TableRow>
               ))}
@@ -215,62 +235,7 @@ const Home = () => {
     <div>
       <div className='mx-9'>
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 w-full mt-4">
-          <Card x-chunk="dashboard-01-chunk-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Missing persons
-              </CardTitle>
-              <Users2 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">9782</div>
-              <p className="text-xs text-muted-foreground text-red-400">
-                20.1% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Cases reported today
-              </CardTitle>
-              <Users2 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">12000</div>
-              <p className="text-xs text-muted-foreground text-red-400">
-                +18% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Children missing
-              </CardTitle>
-              <Users2 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">2120</div>
-              <p className="text-xs text-muted-foreground text-green-400">
-                -20.1% from last month
-              </p>
-            </CardContent>
-          </Card>
-          <Card x-chunk="dashboard-01-chunk-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Women missing
-              </CardTitle>
-              <Users2 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">1290</div>
-              <p className="text-xs text-muted-foreground text-red-400">
-                +20.1% from last month
-              </p>
-            </CardContent>
-          </Card>
+          {/* Dashboard Cards */}
         </div>
 
         {/* Area Chart Component */}
@@ -285,7 +250,6 @@ const Home = () => {
             />
           </div>
         </div>
-
       </div>
     </div>
   );

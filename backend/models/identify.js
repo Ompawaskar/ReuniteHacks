@@ -5,7 +5,8 @@ const imageSchema = new mongoose.Schema({
   description: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   latitude: { type: String, required: true },
-  longitude:{ type: String, required: true }
+  longitude:{ type: String, required: true },
+  ngo:{ type:Boolean,default:false}
 });
 
 const Identify = mongoose.model("Identify", imageSchema); // Correct model name to 'Identify'

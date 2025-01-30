@@ -53,7 +53,7 @@ const Navbar = () => {
             className={isActive('/dashboard/table2')}
           >
             {/* <Package className="h-5 w-5" /> */}
-            Tables
+            NGO Cases
           </NavLink>
         </div>
 
@@ -99,7 +99,7 @@ const Navbar = () => {
             onClick={toggle}
           >
             {/* <Package className="h-5 w-5" /> */}
-            Tables
+            NGO Cases
           </NavLink>
         </div>
       )}
