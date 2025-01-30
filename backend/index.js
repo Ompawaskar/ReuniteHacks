@@ -14,7 +14,11 @@ import { uploadOnCloudinary } from './cloudinary.js';
 import dotenv from "dotenv";
 import { upload } from './multer.middlware.js';
 dotenv.config();
+import fileUpload from 'express-fileupload';
+import multer from "multer";
+import bodyParser from "body-parser";
 
+dotenv.config();
 // Get current file path in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,6 +26,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // ✅ Parses URL-encoded data
+app.use(fileUpload()); 
 
 // Database models
 const MinutiaePointSchema = new Schema({
@@ -443,7 +449,6 @@ app.get('/api/missing-person-image/:imgId', async (req, res) => {
     }
 });
 
-//Register Missing Complaint
 app.post('/api/complaint', upload.single('photo'), async (req, res) => { 
     try {
         const { name, age, gender, phone, missingdate, missingTime, address, height, clothes,aadharData } = req.body;
@@ -497,6 +502,8 @@ app.post('/api/complaint', upload.single('photo'), async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
+
 
 mongoose.connect(process.env.MONGODB_URL).
     then((response) => {

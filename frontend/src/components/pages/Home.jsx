@@ -8,6 +8,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { InView } from '@/components/ui/in-view';
 
 const Home = () => {
   const [text] = useTypewriter({
@@ -73,10 +74,36 @@ const Home = () => {
       </div>
       <div className="p-10 flex justify-around bg-gray-800 min-h-[600px]">
         <div className='w-1/2 m-10'>
-          <h1 className="text-2xl mt-10 mb-4 text-white">The issue of missing persons, particularly children, remains a significant challenge. Despite the efforts of law enforcement and NGOs, the lack of a centralized tracking system often hampers recovery efforts. Our platform addresses this gap by using Aadhaar's biometric authentication system to streamline the identification, tracking, and recovery process. With a focus on efficiency and real-time updates, we aim to support search and rescue operations, ensuring faster reunification of missing individuals with their families. Our goal is to create a safer, more connected world for everyone.</h1>
+        <InView
+          variants={{
+            hidden: { opacity: 0, y: 100, filter: 'blur(4px)' },
+            visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+          }}
+          viewOptions={{ margin: '0px 0px -200px 0px' }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <h1 className="text-2xl mt-10 mb-4 text-white">
+            The issue of missing persons, particularly children, remains a significant challenge. Despite the efforts of law enforcement and NGOs, the lack of a centralized tracking system often hampers recovery efforts. Our platform addresses this gap by using Aadhaar's biometric authentication system to streamline the identification, tracking, and recovery process. With a focus on efficiency and real-time updates, we aim to support search and rescue operations, ensuring faster reunification of missing individuals with their families. Our goal is to create a safer, more connected world for everyone.
+          </h1>
+        </InView>
         </div>
         <div className='w-1/2 m-10'>
+        <InView
+          variants={{
+            hidden: {
+              opacity: 0,
+              x: 100,
+            },
+            visible: {
+              opacity: 1,
+              x: 0,
+            },
+          }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          viewOptions={{ margin: '0px 0px -350px 0px' }}
+        >
           <h1 className="text-7xl font-bold mt-10 mb-4 text-white">About us</h1>
+          </InView>
         </div>
       </div>
       <div className="p-10 flex flex-col align-center items-center min-h-[500px]">

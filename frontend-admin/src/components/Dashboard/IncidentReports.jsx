@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { Download } from "lucide-react";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../ui/accordion";; // Using shadcn components for accordion
-import jsPDF from 'jspdf';
-
-
+import { Download, Search, User, MapPin, Phone, CreditCard } from "lucide-react";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { AnimatedGroup } from '@/components/ui/animated-group';
 
 const missingPersons = [
   {
     "id": "MP-2024-08-20-001",
     "name": "John Doe",
-    "photo": "https://example.com/missing1.jpg",
+    "photo": "https://3.imimg.com/data3/FO/QR/MY-14683381/missing-person-tracing-500x500.png",
     "age": 30,
     "gender": "Male",
     "appearance": {
@@ -47,7 +49,7 @@ const missingPersons = [
   {
     "id": "MP-2024-08-15-002",
     "name": "Jane Smith",
-    "photo": "https://example.com/missing2.jpg",
+    "photo": "https://3.imimg.com/data3/FO/QR/MY-14683381/missing-person-tracing-500x500.png",
     "age": 25,
     "gender": "Female",
     "appearance": {
@@ -81,17 +83,119 @@ const missingPersons = [
       'fingerprint': "link-to-fingerprint-image",
       'photo': "link-to-photo-image"
     }
+  },
+  {
+    "id": "MP-2024-08-20-003",
+    "name": "Alice Johnson",
+    "photo": "https://3.imimg.com/data3/FO/QR/MY-14683381/missing-person-tracing-500x500.png",
+    "age": 16,
+    "gender": "Female",
+    "appearance": {
+      "height": "5'4\"",
+      "clothes": "Pink dress, white shoes"
+    },
+    "phone": "+91-XXXXXXXXXX",
+    "address": "Another address",
+    "aadhar": "3234 5678 9101",
+    "aadharData": {
+      'email_mobile_status': '2',
+      'referenceid': '161120210414003251360',
+      'name': 'Alice Johnson',
+      'dob': '25-02-2008',
+      'gender': 'F',
+      'careof': '',
+      'district': 'Mumbai',
+      'landmark': 'Near Taj Mahal Hotel',
+      'house': 'B/405, Green Palace',
+      'location': '',
+      'pincode': '400065',
+      'postoffice': '',
+      'state': 'Maharashtra',
+      'street': 'Nariman Point',
+      'subdistrict': '',
+      'vtc': 'Nariman Point',
+      'aadhaar_last_4_digit': '5678',
+      'aadhaar_last_digit': '9',
+      'email': true,
+      'mobile': true,
+      'fingerprint': "link-to-fingerprint-image",
+      'photo': "link-to-photo-image"
+    }
   }
 ];
 
 const MissingPersons = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("all");
+
+  const filteredPersons = missingPersons.filter(person => {
+    const matchesSearch = person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      person.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "male" && person.gender.toLowerCase() === "male") ||
+      (filter === "female" && person.gender.toLowerCase() === "female") ||
+      (filter === "minors" && person.age < 18); // Filter for minors
+    return matchesSearch && matchesFilter;
+  });
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Missing Persons</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {missingPersons.map((person) => (
-          <MissingPersonCard key={person.id} person={person} />
-        ))}
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <header className="mb-8">
+          <h1 className="text-4xl font-bold text-center text-gray-900 mb-4">Missing Persons Registry</h1>
+
+          <div className="flex flex-col sm:flex-row gap-4 max-w-3xl mx-auto">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Input
+                type="text"
+                placeholder="Search by name or ID..."
+                className="pl-10 w-full"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant={filter === "all" ? "default" : "outline"}
+                onClick={() => setFilter("all")}
+                className="flex-1 sm:flex-none"
+              >
+                All
+              </Button>
+              <Button
+                variant={filter === "male" ? "default" : "outline"}
+                onClick={() => setFilter("male")}
+                className="flex-1 sm:flex-none"
+              >
+                Male
+              </Button>
+              <Button
+                variant={filter === "female" ? "default" : "outline"}
+                onClick={() => setFilter("female")}
+                className="flex-1 sm:flex-none"
+              >
+                Female
+              </Button>
+              <Button
+                variant={filter === "minors" ? "default" : "outline"}
+                onClick={() => setFilter("minors")}
+                className="flex-1 sm:flex-none"
+              >
+                Minors
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPersons.map((person) => (
+            <AnimatedGroup key={person.id} preset="scale">
+              <MissingPersonCard person={person} />
+            </AnimatedGroup>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -113,106 +217,98 @@ const MissingPersonCard = ({ person }) => {
     aadharData: person.aadharData
   });
 
-  const generatePDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(26);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(0, 51, 102);
-    doc.text("Missing Person Report", 105, 15, { align: "center" });
-
-    const img = new Image();
-    img.src = person.photo;
-    img.onload = () => {
-      let imgWidth = 70;
-      let imgHeight = (img.height * imgWidth) / img.width;
-      if (imgHeight > 60) {
-        imgHeight = 60;
-        imgWidth = (img.width * imgHeight) / img.height;
-      }
-      doc.addImage(img, 'JPEG', 140, 25, imgWidth, imgHeight);
-      addTextContent(doc);
-    };
-
-    img.onerror = () => {
-      addTextContent(doc);
-    };
-  };
-
-  const addTextContent = (doc) => {
-    doc.setFontSize(12);
-    doc.text(`Name: ${formData.name}`, 20, 30);
-    doc.text(`Age: ${formData.age}`, 20, 40);
-    doc.text(`Gender: ${formData.gender}`, 20, 50);
-    doc.text(`Height: ${formData.appearance.height}`, 20, 60);
-    doc.text(`Clothes: ${formData.appearance.clothes}`, 20, 70);
-    doc.text(`Phone: ${formData.phone}`, 20, 80);
-    doc.text(`Address: ${formData.address}`, 20, 90);
-    doc.text(`Aadhar: ${formData.aadhar}`, 20, 100);
-    doc.text(`Aadhar Data: ${formData.aadharData}`, 20, 110);
-  };
-
   return (
-    <div className="bg-white rounded-lg overflow-hidden flex flex-col shadow-lg">
-      <div className="h-48 overflow-hidden relative">
-        <img
-          src={person.photo}
-          alt={person.name}
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-4">
-          <h2 className="text-2xl font-bold">{person.name}</h2>
-          <span className="text-sm text-gray-500">{person.id}</span>
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <CardHeader className="p-0">
+        <div className="relative h-64 overflow-hidden bg-gray-100">
+          <img
+            src={person.photo}
+            alt={person.name}
+            className="w-full h-full object-cover"
+          />
+          <Badge className="absolute top-4 right-4 bg-blue-500">
+            {person.id}
+          </Badge>
         </div>
-        <div className="space-y-2 mb-4">
-          <p className="text-sm text-gray-600"><strong>Age:</strong> {person.age}</p>
-          <p className="text-sm text-gray-600"><strong>Gender:</strong> {person.gender}</p>
-          <p className="text-sm text-gray-600"><strong>Height:</strong> {person.appearance.height}</p>
-          <p className="text-sm text-gray-600"><strong>Clothes:</strong> {person.appearance.clothes}</p>
-        </div>
-        <div className="space-y-2 mb-4">
-          <p className="text-sm"><strong>Phone:</strong> {person.phone}</p>
-          <p className="text-sm"><strong>Address:</strong> {person.address}</p>
-          <p className="text-sm"><strong>Aadhar:</strong> {person.aadhar}</p>
+      </CardHeader>
+
+      <CardContent className="p-6">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">{person.name}</h2>
+          <div className="flex gap-4 text-sm text-gray-600">
+            <span className="flex items-center">
+              <User size={16} className="mr-1" />
+              {person.age} years
+            </span>
+            <span>{person.gender}</span>
+          </div>
         </div>
 
-        <Accordion type="single" collapsible>
-          <AccordionItem value="aadharData">
-            <AccordionTrigger className="bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600">
-              View Aadhar Data
+        <div className="space-y-4 mb-6">
+          <div className="flex items-start gap-2">
+            <User size={16} className="mt-1 text-gray-400" />
+            <div>
+              <p className="text-sm font-medium text-gray-700">Appearance</p>
+              <p className="text-sm text-gray-600">
+                {person.appearance.height}, {person.appearance.clothes}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-2">
+            <Phone size={16} className="mt-1 text-gray-400" />
+            <div>
+              <p className="text-sm font-medium text-gray-700">Contact</p>
+              <p className="text-sm text-gray-600">{person.phone}</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-2">
+            <MapPin size={16} className="mt-1 text-gray-400" />
+            <div>
+              <p className="text-sm font-medium text-gray-700">Last Known Location</p>
+              <p className="text-sm text-gray-600">{person.address}</p>
+            </div>
+          </div>
+        </div>
+
+        <Accordion type="single" collapsible className="mb-6">
+          <AccordionItem value="aadharData" className="border rounded-lg">
+            <AccordionTrigger className="px-4 py-2 hover:bg-gray-50">
+              <div className="flex items-center gap-2">
+                <CreditCard size={16} />
+                <span>View Aadhar Details</span>
+              </div>
             </AccordionTrigger>
-            <AccordionContent className="p-4 bg-gray-50 rounded-b-lg">
-              <p><strong>Name:</strong> {formData.aadharData.name}</p>
-              <p><strong>Reference ID:</strong> {formData.aadharData.referenceid}</p>
-              <p><strong>Date of Birth:</strong> {formData.aadharData.dob}</p>
-              <p><strong>Gender:</strong> {formData.aadharData.gender}</p>
-              <p><strong>District:</strong> {formData.aadharData.district}</p>
-              <p><strong>Landmark:</strong> {formData.aadharData.landmark}</p>
-              <p><strong>Location:</strong> {formData.aadharData.location}</p>
-              <p><strong>Pincode:</strong> {formData.aadharData.pincode}</p>
-              <p><strong>State:</strong> {formData.aadharData.state}</p>
-              <p><strong>Street:</strong> {formData.aadharData.street}</p>
-              <p><strong>Aadhaar Last 4 Digits:</strong> {formData.aadharData.aadhaar_last_4_digit}</p>
-              <p><strong>Email:</strong> {formData.aadharData.email ? 'Yes' : 'No'}</p>
-              <p><strong>Mobile:</strong> {formData.aadharData.mobile ? 'Yes' : 'No'}</p>
-              <p><strong>Fingerprint:</strong> <a href={formData.aadharData.fingerprint} target="_blank" rel="noopener noreferrer">View Fingerprint</a></p>
-              <p><strong>Photo:</strong> <a href={formData.aadharData.photo} target="_blank" rel="noopener noreferrer">View Photo</a></p>
+            <AccordionContent className="p-4 space-y-2 text-sm">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="font-medium">Reference ID</p>
+                  <p className="text-gray-600">{formData.aadharData.referenceid}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Date of Birth</p>
+                  <p className="text-gray-600">{formData.aadharData.dob}</p>
+                </div>
+                <div>
+                  <p className="font-medium">District</p>
+                  <p className="text-gray-600">{formData.aadharData.district}</p>
+                </div>
+                <div>
+                  <p className="font-medium">State</p>
+                  <p className="text-gray-600">{formData.aadharData.state}</p>
+                </div>
+              </div>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
 
-        <div className="flex items-center justify-between mt-auto pt-4 border-t">
-          <button 
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200 flex items-center"
-            onClick={generatePDF}
-          >
-            <Download size={16} className="mr-2" />
-            Full Report Download
-          </button>
-        </div>
-      </div>
-    </div>
+        <Button className="w-full flex items-center justify-center gap-2">
+          <Download size={16} />
+          Download Full Report
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 
