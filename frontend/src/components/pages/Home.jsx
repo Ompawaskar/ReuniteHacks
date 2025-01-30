@@ -67,7 +67,7 @@ const Home = () => {
       </div>
       <div className="absolute bottom-10 ml-44 transform -translate-x-1/2">
         <button onClick={() => navigate('/complain')}
-          className="p-3 bg-[#115579] text-white text-xl rounded-full hover:bg-[#0e4d6c] transition-all duration-300"
+          className="p-3 top-[100px] bg-[#115579] text-white text-xl rounded-full hover:bg-[#0e4d6c] transition-all duration-300"
         >
           Post a complaint
         </button>
