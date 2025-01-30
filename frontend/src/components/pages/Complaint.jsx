@@ -30,87 +30,85 @@ import {
 } from "@/components/ui/alert";
 
 const ComplaintForm = () => {
-  const [userDetails, setUserDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [toast, setToast] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    photo: "",
-    age: "",
-    gender: "",
-    appearance: {
-      height: "",
-      clothes: "",
-    },
-    phone: "",
-    address: "",
-    aadharData: "",
-    missingDate: "",
-    missingTime: ""
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const showToast = (message, type = 'info') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
+  const initialFormState = {
+    name: '',
+    age: '',
+    gender: '',
+    phone: '',
+    appearance: {
+      height: '',
+      clothes: '',
+    },
+    missingDate: '',
+    missingTime: '',
+    address: '',
+    photo: null,
   };
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        try {
-          const response = await axios.get(`http://localhost:3001/api/users/${user.uid}`);
-          setUserDetails(response.data);
-        } catch (error) {
-          console.error("Error fetching user data:", error.message);
-        }
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+  const [formData, setFormData] = useState(initialFormState);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleAppearanceChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      appearance: {
-        ...prev.appearance,
-        [name]: value,
-      },
+      appearance: { ...prev.appearance, [name]: value }
     }));
   };
 
   const handleFileChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      photo: e.target.files[0]
-    }));
+    const file = e.target.files?.[0] || null;
+    setFormData(prev => ({ ...prev, photo: file }));
   };
 
   const handleAadharUpload = async (e) => {
     const file = e.target.files[0];
-    setFormData(prev => ({
-      ...prev,
-    }));
-
+    
     if (file) {
       const reader = new FileReader();
       reader.onload = async () => {
-        const result = await QrScanner.scanImage(reader.result);
-        setFormData(prev => ({
-          ...prev,
-          aadharData: result
-        }));
-        showToast("Aadhaar QR scanned successfully!", "success");
+        try {
+          const result = await QrScanner.scanImage(reader.result);
+          // Assuming the QR scan result contains the Aadhaar data in the required format
+          const aadharData = JSON.parse(result);
+          
+          // Update both aadharData and form fields
+          setFormData(prev => ({
+            ...prev,
+            // Update aadharData object
+            aadharData: {
+              name: aadharData.name || "",
+              number: aadharData.number || null,
+              age: aadharData.age || null,
+              gender: aadharData.gender || "",
+              dob: aadharData.dob || "",
+              address: aadharData.address || "",
+              phone: {
+                number: aadharData.phone?.number || null,
+                location: aadharData.phone?.location || ""
+              },
+              email: aadharData.email || "",
+              photo: aadharData.photo || "",
+              fingerprint: aadharData.fingerprint || ""
+            },
+            // Auto-fill relevant form fields
+            name: aadharData.name || prev.name,
+            age: aadharData.age?.toString() || prev.age,
+            gender: aadharData.gender?.toLowerCase() || prev.gender,
+            phone: aadharData.phone?.number?.toString() || prev.phone,
+            
+          }));
+          
+        } catch (error) {
+          console.error("Error parsing Aadhaar data:", error);
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -119,45 +117,46 @@ const ComplaintForm = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setToast(null);
 
-    const data = new FormData();
-    for (const key in formData) {
-      if (key === 'appearance') {
-        data.append(key, JSON.stringify(formData[key]));
-      } else {
-        data.append(key, formData[key]);
+    const formDataToSend = new FormData();
+
+    // Append basic fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key !== 'appearance' && value !== null) {
+        formDataToSend.append(key, value);
       }
-    }
+    });
 
+    // Append appearance fields
+    Object.entries(formData.appearance).forEach(([key, value]) => {
+      formDataToSend.append(key, value);
+    });
+
+    console.log(formData);
+    
     try {
-      await axios.post('http://localhost:4001/api/complaint', data, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      const response = await fetch('http://localhost:4001/api/complaint', {
+        method: 'POST',
+        body: formDataToSend,
       });
-      showToast("Your complaint has been successfully registered.", "success");
-      setFormData({
-        name: "",
-        photo: "",
-        age: "",
-        gender: "",
-        appearance: { height: "", clothes: "" },
-        phone: "",
-        address: "",
-        aadhar: "",
-        aadharData: "",
-        missingDate: "",
-        missingTime: ""
+
+      if (!response.ok) {
+        throw new Error('Submission failed. Please try again.');
+      }
+
+      setToast({ type: 'success', message: 'Report submitted successfully!' });
+      setFormData(initialFormState);
+    } catch (error) {
+      setToast({ 
+        type: 'error', 
+        message: error instanceof Error ? error.message : 'An unexpected error occurred' 
       });
-    } catch (err) {
-      console.error('Error submitting complaint:', err);
-      showToast("There was an error submitting your complaint. Please try again.", "error");
     } finally {
       setIsSubmitting(false);
     }
   };
-  console.log(formData)
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -303,6 +302,7 @@ const ComplaintForm = () => {
                     <div className="flex items-center gap-4">
                       <Input
                         id="photo"
+                        name="photo"
                         type="file"
                         onChange={handleFileChange}
                         accept="image/*"
@@ -324,6 +324,7 @@ const ComplaintForm = () => {
                     <div className="flex items-center gap-4">
                       <Input
                         id="aadhar"
+                        name="aadhar"
                         type="file"
                         onChange={handleAadharUpload}
                         accept="image/*"
