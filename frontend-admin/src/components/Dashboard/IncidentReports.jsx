@@ -1,11 +1,56 @@
 import React, { useState } from "react";
-import { Download, Search, User, MapPin, Phone, CreditCard } from "lucide-react";
+import { Download, Search, User, MapPin, Phone, CreditCard, Check, X, Loader2 } from "lucide-react";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AnimatedGroup } from '@/components/ui/animated-group';
+
+const ProcessingStatus = {
+  IDLE: 'idle',
+  LOADING: 'loading',
+  SUCCESS: 'success',
+  ERROR: 'error'
+};
+
+const StatusButton = ({ status, onClick }) => {
+  const getStatusDisplay = () => {
+    switch (status) {
+      case ProcessingStatus.LOADING:
+        return <Loader2 className="h-4 w-4 animate-spin" />;
+      case ProcessingStatus.SUCCESS:
+        return <Check className="h-4 w-4" />;
+      case ProcessingStatus.ERROR:
+        return <X className="h-4 w-4" />;
+      default:
+        return null;
+    }
+  };
+
+  const getButtonClasses = () => {
+    switch (status) {
+      case ProcessingStatus.SUCCESS:
+        return "bg-green-500 hover:bg-green-600";
+      case ProcessingStatus.ERROR:
+        return "bg-red-500 hover:bg-red-600";
+      default:
+        return "";
+    }
+  };
+
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      className={`absolute top-4 left-4 h-8 w-8 rounded-full ${getButtonClasses()}`}
+      onClick={onClick}
+      disabled={status === ProcessingStatus.LOADING}
+    >
+      {getStatusDisplay()}
+    </Button>
+  );
+};
 
 const missingPersons = [
   {
@@ -217,10 +262,34 @@ const MissingPersonCard = ({ person }) => {
     aadharData: person.aadharData
   });
 
+  const [processingStatus, setProcessingStatus] = useState(ProcessingStatus.IDLE);
+
+  const handleProcessing = async () => {
+    setProcessingStatus(ProcessingStatus.LOADING);
+
+    try {
+      // Simulate backend processing
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // Randomly succeed or fail for demonstration
+          Math.random() > 0.5 ? resolve() : reject();
+        }, 2000);
+      });
+
+      setProcessingStatus(ProcessingStatus.SUCCESS);
+    } catch (error) {
+      setProcessingStatus(ProcessingStatus.ERROR);
+    }
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="p-0">
         <div className="relative h-64 overflow-hidden bg-gray-100">
+          <StatusButton
+            status={processingStatus}
+            onClick={handleProcessing}
+          />
           <img
             src={person.photo}
             alt={person.name}
