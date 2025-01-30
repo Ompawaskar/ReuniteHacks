@@ -99,7 +99,7 @@ app.post('/api/toggleVerification/:id', async (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/complaints', complaintRoutes);
 // MongoDB connection
-mongoose.connect("mongodb+srv://atharvayadav11:ashokvaishali@cluster0.twnwnbu.mongodb.net/AapkaRakshaDB?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://ompawaskar7:ruchita123@cluster0.xarrw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
