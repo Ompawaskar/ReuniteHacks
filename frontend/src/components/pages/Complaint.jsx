@@ -30,94 +30,43 @@ import {
 } from "@/components/ui/alert";
 
 const ComplaintForm = () => {
-  const [userDetails, setUserDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [toast, setToast] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    photo: "",
-    age: "",
-    gender: "",
-    appearance: {
-      height: "",
-      clothes: "",
-    },
-    phone: "",
-    address: "",
-    aadharData: {
-      name: "",
-      number: null,
-      age: null,
-      gender: "",
-      dob: "",
-      address: "",
-      phone: {
-        number: null,
-        location: ""
-      },
-      email: "",
-      photo: "",
-      fingerprint: ""
-    },
-    missingDate: "",
-    missingTime: ""
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const showToast = (message, type = 'info') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
+  const initialFormState = {
+    name: '',
+    age: '',
+    gender: '',
+    phone: '',
+    appearance: {
+      height: '',
+      clothes: '',
+    },
+    missingDate: '',
+    missingTime: '',
+    address: '',
+    photo: null,
+
   };
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        try {
-          const response = await axios.get(`http://localhost:3001/api/users/${user.uid}`);
-          setUserDetails(response.data);
-        } catch (error) {
-          console.error("Error fetching user data:", error.message);
-        }
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+  const [formData, setFormData] = useState(initialFormState);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleAppearanceChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      appearance: {
-        ...prev.appearance,
-        [name]: value,
-      },
+      appearance: { ...prev.appearance, [name]: value }
     }));
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData(prev => ({
-        ...prev,
-        photo: file,  // Keep the file itself
-      }));
-  
-      // Create a preview URL
-      const imageUrl = URL.createObjectURL(file);
-      setFormData(prev => ({
-        ...prev,
-        photoPreview: imageUrl,  // Store a preview
-      }));
-    }
+    const file = e.target.files?.[0] || null;
+    setFormData(prev => ({ ...prev, photo: file }));
   };
   
 
@@ -159,9 +108,7 @@ const ComplaintForm = () => {
             
           }));
           
-          showToast("Aadhaar QR scanned successfully! Form fields have been auto-filled.", "success");
         } catch (error) {
-          showToast("Error scanning Aadhaar QR code", "error");
           console.error("Error parsing Aadhaar data:", error);
         }
       };
@@ -172,65 +119,48 @@ const ComplaintForm = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-  
+    setToast(null);
+
+    const formDataToSend = new FormData();
+
+    // Append basic fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key !== 'appearance' && value !== null) {
+        formDataToSend.append(key, value);
+      }
+    });
+
+    // Append appearance fields
+    Object.entries(formData.appearance).forEach(([key, value]) => {
+      formDataToSend.append(key, value);
+    });
+
+    console.log(formData);
+    
     try {
-      console.log("FormData",formData);
-      
-      const submissionData = new FormData();
-      if (formData.photo) {
-        submissionData.append("file", formData.photo); // Use formData.photo instead of undefined selectedFile
-      }
-      submissionData.append("name", formData.name);
-      submissionData.append("age", formData.age);
-      submissionData.append("gender", formData.gender);
-      submissionData.append("phone", formData.phone);
-      submissionData.append("address", formData.address);
-      submissionData.append("missingDate", formData.missingDate);
-      submissionData.append("missingTime", formData.missingTime);
-
-      // Append appearance details
-      submissionData.append("appearance[height]", formData.appearance.height);
-      submissionData.append("appearance[clothes]", formData.appearance.clothes);
-
-      // Append Aadhaar details if available
-      if (formData.aadharData.number) {
-        submissionData.append("aadhar[name]", formData.aadharData.name);
-        submissionData.append("aadhar[number]", formData.aadharData.number);
-        submissionData.append("aadhar[age]", formData.aadharData.age);
-        submissionData.append("aadhar[gender]", formData.aadharData.gender);
-        submissionData.append("aadhar[dob]", formData.aadharData.dob);
-        submissionData.append("aadhar[address]", formData.aadharData.address);
-        submissionData.append("aadhar[phone][number]", formData.aadharData.phone.number);
-        submissionData.append("aadhar[phone][location]", formData.aadharData.phone.location);
-        submissionData.append("aadhar[email]", formData.aadharData.email);
-        submissionData.append("aadhar[photo]", formData.aadharData.photo);
-        submissionData.append("aadhar[fingerprint]", formData.aadharData.fingerprint);
-      }
-
-      const response = await fetch("http://localhost:3001/api/complaints", {
-        method: "POST",
-        body: submissionData, // ✅ No need to stringify
+      const response = await fetch('http://localhost:4001/api/complaint', {
+        method: 'POST',
+        body: formDataToSend,
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit complaint");
+        throw new Error('Submission failed. Please try again.');
       }
 
-      showToast("Your complaint has been successfully registered.", "success");
-    } catch (err) {
-      console.error("Error submitting complaint:", err);
-      showToast(err.message || "There was an error submitting your complaint. Please try again.", "error");
+      setToast({ type: 'success', message: 'Report submitted successfully!' });
+      setFormData(initialFormState);
+    } catch (error) {
+      setToast({ 
+        type: 'error', 
+        message: error instanceof Error ? error.message : 'An unexpected error occurred' 
+      });
     } finally {
       setIsSubmitting(false);
     }
-};
+  };
 
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  console.log(formData)
+  
+   
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -328,42 +258,53 @@ const ComplaintForm = () => {
               </div>
             </div>
 
-            {/* Last Seen Information */}
-            <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900">Last Seen Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="missingDate">Date Last Seen</Label>
-                  <Input
-                    id="missingDate"
-                    name="missingDate"
-                    type="date"
-                    value={formData.missingDate}
-                    onChange={handleInputChange}
-                    className="w-full"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="missingTime">Time Last Seen</Label>
-                  <Input
-                    id="missingTime"
-                    name="missingTime"
-                    type="time"
-                    value={formData.missingTime}
-                    onChange={handleInputChange}
-                    className="w-full"
-                  />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="address">Last Known Location</Label>
-                  <Textarea
-                    id="address"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    placeholder="Enter the last known location or address"
-                    className="w-full"
-                  />
+              {/* Documents Upload Section */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-900">Documents & Photos</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="photo">Recent Photo</Label>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        id="photo"
+                        name="photo"
+                        type="file"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => document.getElementById('photo').click()}
+                      >
+                        <Camera className="mr-2 h-4 w-4" />
+                        Upload Photo
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="aadhar">Aadhaar Card QR</Label>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        id="aadhar"
+                        name="aadhar"
+                        type="file"
+                        onChange={handleAadharUpload}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => document.getElementById('aadhar').click()}
+                      >
+                        Upload Aadhaar QR
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
