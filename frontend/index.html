@@ -4,11 +4,121 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="./src/assets/logo.png">
-    <title>ReUnite</title>
+    <title>DivYatra</title>
+    <style>
+      #google_translate_element {
+        position: fixed;
+        top: 80px;
+        right: 10px;
+        z-index: 1000;
+        display: none; /* Initially hidden */
+      }
+      
+      /* Customize the dropdown button */
+      .goog-te-gadget-simple {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 4px;
+        font-family: Arial, sans-serif;
+      }
+      
+      /* Customize the language menu */
+      .goog-te-menu-value {
+        color: #333;
+        font-weight: bold;
+      }
+
+      /* Style for the toggle button */
+      #translateToggle {
+        position: fixed;
+        top: 30px;
+        right: 10px;
+        z-index: 1001;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 555px;
+        cursor: pointer;
+      }
+      #ima{
+        width: 20px;
+      }
+      #translateToggle:hover {
+        background-color: #45a049;
+      }
+      .goog-logo-link,
+      .goog-te-gadget span {
+       display: none !important;
+       .goog-te-gadget-simple {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}
+
+.goog-te-menu-value {
+    font-weight: bold;
+    color: #4CAF50;
+    padding-right: 20px; /* Space for dropdown arrow */
+    position: relative;
+}
+
+.goog-te-menu-value::after {
+    content: "▼";
+    font-size: 12px;
+    color: #4CAF50;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.goog-te-menu-frame {
+    border-radius: 8px !important;
+    border: 1px solid #ccc !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+}
+  
+    </style>
   </head>
   <body>
+    <div id="google_translate_element"></div>
+    <button id="translateToggle">
+      <img src="https://cdn-icons-png.flaticon.com/512/281/281776.png" alt="" id="ima">
+    </button>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+          new google.translate.TranslateElement({
+              pageLanguage: 'en',
+              includedLanguages: 'hi,kn,ta,te,ml,mr,gu,bn,pa,ur', // List of Indian languages
+              layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+          }, 'google_translate_element');
+      }
+    
+      // Toggle visibility of Google Translate element
+      document.getElementById('translateToggle').addEventListener('click', function() {
+        var translateElement = document.getElementById('google_translate_element');
+        if (translateElement.style.display === 'none' || translateElement.style.display === '') {
+          translateElement.style.display = 'block';
+        } else {
+          translateElement.style.display = 'none';
+        }
+      });
+    </script>
+    
+    
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </body>
 </html>
