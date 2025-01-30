@@ -1,2 +1,51 @@
 SR_NO,IMAGE_PATH,DATE_OF_REGISTRATION,NAME,AGE,INCIDENT_PLACE,POLICE_STATION,DISTRICT
-
+1,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\4p4b3HitPxWWzqbS9kyZ2F6eTd39Caic.jpg,02/01/2025,वेदिका नंदकुमार शिरसाठ,23,"फ्लोरीना अपार्टमेंट, फ्लट नं 2,",अंबड,नाशिक शहर
+2,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\82B3GsbTabBDmsSpgH0MffTQqw2eGUoO.jpg,02/01/2025,स्नेहा  विजय  मडावी,19,डायमंड चरीटेबल एज्युकेशन ट्स्ट  पोठाणे शांतीनगर,शांतीनगर,नागपुर शहर
+3,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\I8rBsaFR0tITm7aPZImpaFCFsyfvxabt.jpg,02/01/2025,विनोद  चंद्रकांत  सोनार,40,"लव किराणा दुकानाजवळ, संभाजीनगर, सेक्टर-8, सीबीडी, बेलापूर, नवी मुंबई",सी बी डी बेलापूर,नवी मुंबई
+4,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\2sWwYasNe5gQNm9VL14KSASnSIU5f7yB.jpg,02/01/2025,आदीती नामदेव माने,21,मेट्रो हाँस्पीटल शाहुपुरी ता करवीर जि कोल्हापुर येथुन,शाहुपूरी,कोल्हापुर
+5,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\qPUOQRWUCyyjp0j2AwzYjFFTrpQN6gD5.jpg,02/01/2025,रुपाली पिता संतोष पाचुंदे,19,शिरोडी खुद,खुलताबाद,छत्रपती संभाजीनगर(ग्रामीण)
+6,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\RREtnkTQNw+mYte6QUmAQB7W6bUd3R9B.jpg,02/01/2025,कु. संध्या संतोष कुंभार,22,मौजे येडगाव ता जुन्नर जिपुणे गावात राहणारे खबर देणार यांचे साडू विकास लक्ष्मण जाधव यांचे राहते घरा,नारायणगांव,पुणे ग्रामीण
+7,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\X3LDKz5IhXLd2CC8seXTHgCaxb04uIht.jpg,02/01/2025,सुहाना  तौफीक तौफीक,21,कुरेशी मुहल्ला सिरसदेवी येथे,तलवाडा,बीड
+8,,02/01/2025,वर्षा सुधीर सौजियानी,66,घरातुन,माणिकपुर,"मिरा-भाईदर, वसई-विरार पोलीस आयुक्तालय"
+9,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\vVEdE9Z0SKEaSK4yQFhqI2OlVkx78o66.jpg,02/01/2025,दत्तात्रय   शेषेराव शिंदे,34,फिर्यादीचे राहते घरातुन मौजे पानचिंचोली ता निलंगा येथुन,निलंगा,लातूर
+10,,02/01/2025,दिक्षा  दिनेश  चव्हाण,21,अमरदिप कलनी कदम चाळ आझाद  चौक ज्योतीबा नगर काळेवाडी पुणे,काळेवाडी,पिंपरी-चिंचवड
+11,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\+gm5Ovx9bU2EZaMSv7Jc2qM92RKP+dV+.jpg,02/01/2025,आरती नंदकुमार कुदळे,18,मौजे सांगवी ताफलटण,फलटण ग्रामीण,सातारा
+12,,02/01/2025,इश्वर    दामोदर कोकरे,25,फिर्यादीचे राहते घरून गांधी नगर निलंगा येथुन,निलंगा,लातूर
+13,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\RY8fJ0er5ba+XmZBlALUk0vkyA2UvL4l.jpg,02/01/2025,अंजू   अमराराम चौधरी,20,देवभूमी,सफाळा,पालघर
+14,,02/01/2025,सौ नेहा दत्ता बागव,51,रेल्वे स्टेशन यवत ता दौंड जि पुणे येथुन,यवत,पुणे ग्रामीण
+15,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\HyJ2wJ0xueOCDLFUWHBBWqNBe3wCrGwH.jpg,02/01/2025,जोत्सना प्रमोद देसाई,19,मुंढे ताकराड,कराड शहर,सातारा
+16,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\jbD0d+14Vcw2HeYWzPEm6PuGVHrPh+1i.jpg,02/01/2025,फिजा  शाहरुख  खान,22,राहते घरातून फ्लट नं602 गिरीराज हाईट गायकवाड नगर                                    दिघी पुणे येथ,दिघी,पिंपरी-चिंचवड
+17,,02/01/2025,निशा आश्विन देशपांडे,22,गंगापुर जहाँगिर शेंद्रा ता जि छ संभाजीनगर,चिकलठाणा,छत्रपती संभाजीनगर(ग्रामीण)
+18,,02/01/2025,शितल राजेंद्र महाजन,22,मोरफळ ता पारोळा,पारोळा,जळगाव
+19,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\NuwOY6iuMKMCWQHIs2kVG44mJ7Y94Qe6.jpg,02/01/2025,प्रितीमा   रविशंकर   जाटव,35,खंडोबामाळ भोसरी पुणे,भोसरी,पिंपरी-चिंचवड
+20,,02/01/2025,आदिती  दिलीप  दहातोंडे,21,N-11 घर नं C/4 17/6 गजानन नगर  हडको छत्रपती संभाजीनगर,सिडको,छत्रपती संभाजीनगर शहर
+21,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\LkIrffxjHGvfxqg6LRNKH56kisKzdhRH.jpg,02/01/2025,जुलकीफ्ल  युनुस्मिया  पावसकर,20,राहते घरातुन,कुडाळ,सिंधुदुर्ग
+22,,02/01/2025,कोमल राजेश मोरे,19,खबर देणार यांचे घरातुन  सरस्वती  नगर अजिक्यतारा सिन्नर ता सिन्नर जि नाशिक,सिन्‍नर,नाशिक ग्रामीण
+23,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\UjA2ehVEXiazfAHKw4+umr+lxr9yuvM7.jpg,02/01/2025,साई उर्फ कांचा संदीपगोवेकर,26,शिर्डी येथील 500 रुम जवळील वसतीगहात,शिर्डी,अहिल्यानगर
+24,,02/01/2025,खतीजा उर्फ आलीया शे आरीफ,20,निभोंरा बु ता रावेर ऱाहते घरातुन,निंभोरा,जळगाव
+25,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\82B3GsbTabD4tw0G1alegeBFLbDPm2+y.jpg,02/01/2025,कु. सविता देवीदास डंभारे,50,शांतीनगर मदन गह उद्याग जवळ नागपुर,शांतीनगर,नागपुर शहर
+26,,02/01/2025,रामकिसन    सोनवने,48,राहत्या घरातुन,आळंदी,पिंपरी-चिंचवड
+27,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\q6FAw28S0LTnfwenKmI9n9ml1ItSa1fK.jpg,02/01/2025,कु.धनश्री महेश कबाडे,40,"11  बुधवार पेठ,औंधकर,  महाराज मठ ताजिसातारा येथुन राहते घरातुन",सातारा शहर,सातारा
+28,,02/01/2025,आस्था  वेदप्रकाश  मिश्रा,19,राहते घरातुन,कामोठे,नवी मुंबई
+29,,02/01/2025,आकांक्षा टिकमप्रसाद सिंग,27,राहत्या घरातुन,कशिमिरा,"मिरा-भाईदर, वसई-विरार पोलीस आयुक्तालय"
+30,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\VQ4lb493jhV3Pf0JhrVEmkxy8gtXrrxo.jpg,02/01/2025,मलिक कपील गिरी,33,कापसी बाजार पारडी,पारडी,नागपुर शहर
+31,,02/01/2025,रुषाली   ज्ञानेश्वर  करंजकर,23,राहत्या घरातुन,आळंदी,पिंपरी-चिंचवड
+32,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\TrN8pqnzTeXdC0eFd+f15HJhj3UzXGus.jpg,02/01/2025,साक्षी  विष्णु   येळवे,20,शिवाजी नगर मलकापुर,मलकापूर शहर,बुलढाणा
+33,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\9e9X0htYvBGhkMaAduu0xY9sJcutfpuX.jpg,02/01/2025,कल्पना  लखन  हरदो,64,"परदेशीपुरा, वलगाव ताजिअमरावती",बळगांव,अमरावती शहर
+34,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\rnhM8my4FsB9+pc3u0Scd1ASOKyTtyQY.jpg,02/01/2025,अमोल बबन उबाळे,40,"सरपन गल्ली, भिंगार ता जि अहिल्यानगर",अहिल्यानगर कॅम्प पोलीस ठाणे,अहिल्यानगर
+35,,02/01/2025,दिलशाद अस्लम शेख  दिलशाद अस्लम शेख,27,नाईकवाडी वस्ती मोहोळ तामोहोळ जिसोलापुर,मोहोळ,सोलापुर ग्रामीण
+36,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\xK2BccmA2m0yGlvjwap2sYgtSdz3T0bG.jpg,02/01/2025,रोशन रुपचंद अग्रवाल,28,बजाजनगर,एम.आई.डी.सी. वाळूंज,छत्रपती संभाजीनगर शहर
+37,,02/01/2025,सौ.माहेश्वरी मंगेश टेंभुर्णे मुलगा मयंक वय 08 व माहीर वय 04 वर्ष,28,स्वताचे घरून आपले 08 वर्षाचे मुलासह निघुन गेली,साकोली,भंडारा
+38,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\pptX21lDZyrKT+xSgJzRyAlI9zBMWkUv.jpg,02/01/2025,साई जिवन वेताळ,20,यमुना रेसिडेन्सी सेकन्ड फ्लोअर  प्लट नं 9 ढोरेवाडा वडगाव तामावळ जि पुणे,वडगांव मावळ,पुणे ग्रामीण
+39,,02/01/2025,अक्षय सुभाष गायकवाड,28,नँझरीन चर्च जवळ मालेगांव,मालेगांव,वाशिम
+40,,02/01/2025,साक्षी अविनाश घोडके,21,"फोंडाघाट विद्यानगर काँलनी, ता कणकवली",कणकवली,सिंधुदुर्ग
+41,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\9P2CiRo0pgvclVmis7xfmwDENFuADNA5.jpg,02/01/2025,नंदिनी मुन्ना गुप्ता,18,रहाते घरातुन दगडोबा चौक चिंचवड पुणे,चिंचवड,पिंपरी-चिंचवड
+42,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\4p4b3HitPxWyrIoDTvzUHK4h+fVJVyHO.jpg,02/01/2025,सोनम बेगम निसार अजीज,25,"रूम 9/3,अंबिका संकुल,विराट नगर , नाशिक",अंबड,नाशिक शहर
+43,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\LUpFa+2nMtwiAWbAzz7b0ThiGuIFQ2DL.jpg,02/01/2025,रजिया बेगम  अब्दुल  हमीम,50,हजारखोली घर न 944 मालेगाव,आयशा नगर,नाशिक ग्रामीण
+44,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\4p4b3HitPxVfx8s9gBfji03YDEyGRQJd.jpg,02/01/2025,हसीना मुनवर हुसेन,25,"गोल्डन किराना जवळ,संजीव नगर, नाशिक",अंबड,नाशिक शहर
+45,,02/01/2025,प्रियांका राजा नाईक,21,मौजे कोऴघर आश्रमशाळेजवळ राहते घरातुन,पोयनाड,रायगड
+46,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\ITtAMH8829vR5KDxzfaYXeNp7Ld4CwSL.jpg,02/01/2025,उषा विनायक गांगुर्डे,19,खबर देणार यांचे घऱातुन मोहाडी शिवार तादिंडोरी जिनाशिक  दिंडोरी पोलीस ठाणे मिसींग रजिनं01/2025 प्रम,दिंडोरी,नाशिक ग्रामीण
+47,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\2sWwYasNe5i2qt0IyLQLkWHa8sXJbHRY.jpg,02/01/2025,अजय श्रीकांत बिरुनगी,28,शाहुपुरी पोलीस ठाणेच्या रोड समोरुन,शाहुपूरी,कोल्हापुर
+48,,02/01/2025,भाग्यश्री  भ्र. संतोष चौधरी,33,पारा येथील राहते घरून,वाशी,धाराशिव
+49,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\i8LlKI04F6rBK8Alfpb9z3bm4JxOv2kA.jpg,02/01/2025,ाकीर  हुसेन मोहम्मद  सय्यद,54,गजानन हाउसिंग सोसायटी बिलाल मध्ये जवळ शिर्के रोड भिम नगर मुंढवा,मुंढवा,पुणे शहर
+50,C:\Users\ROCHE\Desktop\ReuniteHacks\backend\images\49NKEdUhZSFw90K1C46wYUEXkZNqlhVx.jpg,02/01/2025,आदित्य उर्फ सनि राजेंद्रदेशमुख,26,उद्योग भवन सिन्नर ता सिन्नर जि नाशिक,सिन्‍नर,नाशिक ग्रामीण
